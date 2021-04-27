@@ -1,4 +1,5 @@
 const { DataSource } = require('apollo-datasource');
+const {} = require('../store');
 
 class SurveyDataSource extends DataSource {
   constructor({ store }) {
@@ -26,14 +27,16 @@ class SurveyDataSource extends DataSource {
   }
 
   async getAllSurveys() {
-    const response = [
-      {
-        id: 123,
-        title: "Hello World Survey!",
-        totalResponses: 10,
-      }
-    ];
-    return response.map(response => this.surveyReducer(response));
+    console.log(this.store);
+    // const response = [
+    //   {
+    //     id: 123,
+    //     title: "Hello World Survey!",
+    //     totalResponses: 10,
+    //   }
+    // ];
+    // return response.map(response => this.surveyReducer(response));
+
   }
 
   async getSurveyResponses(surveyId) {

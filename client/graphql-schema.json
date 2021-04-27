@@ -9,7 +9,7 @@
     "types": [
       {
         "kind": "OBJECT",
-        "name": "SurveyResponse",
+        "name": "Answer",
         "description": null,
         "specifiedByUrl": null,
         "fields": [
@@ -155,7 +155,7 @@
             "deprecationReason": null
           },
           {
-            "name": "totalResponses",
+            "name": "totalAnswers",
             "description": null,
             "args": [],
             "type": {
@@ -167,7 +167,7 @@
             "deprecationReason": null
           },
           {
-            "name": "responses",
+            "name": "answers",
             "description": null,
             "args": [],
             "type": {
@@ -175,7 +175,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SurveyResponse",
+                "name": "Answer",
                 "ofType": null
               }
             },

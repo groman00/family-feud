@@ -8,8 +8,8 @@ const SURVEYS = gql`
     surveys {
       id
       title
-      totalResponses
-      responses {
+      totalAnswers
+      answers {
         id
         text
         count

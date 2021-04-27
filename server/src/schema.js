@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-  type SurveyResponse {
+  type Answer {
     id: ID!
     surveyId: ID!
     count: Int
@@ -12,8 +12,8 @@ const typeDefs = gql`
   type Survey {
     id: ID!
     title: String
-    totalResponses: Int
-    responses: [SurveyResponse]
+    totalAnswers: Int
+    answers: [Answer]
   }
   
   type Query {
@@ -22,8 +22,7 @@ const typeDefs = gql`
   }
 `;
 
-
-  // type SurveyResponse {
+  // type SurveyCreatedResponse {
   //   success: Boolean!
   //   message: String
   //   survey: Survey
