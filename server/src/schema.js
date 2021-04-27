@@ -1,9 +1,10 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-  type Response {
+  type SurveyResponse {
     id: ID!
-    total: Int
+    surveyId: ID!
+    count: Int
     text: String
     rank: Int
   }
@@ -12,23 +13,24 @@ const typeDefs = gql`
     id: ID!
     title: String
     totalResponses: Int
-    responses: [Response]
+    responses: [SurveyResponse]
   }
   
   type Query {
-    surveys: [Survey]!
+    surveys: [Survey!]!
     survey(id: ID!): Survey
   }
-
-  type SurveyResponse {
-    success: Boolean!
-    message: String
-    survey: Survey
-  }
-
-  type Mutation {
-    createSurvey(title: String): SurveyResponse
-  }
 `;
+
+
+  // type SurveyResponse {
+  //   success: Boolean!
+  //   message: String
+  //   survey: Survey
+  // }
+
+  // type Mutation {
+  //   createSurvey(title: String): SurveyResponse
+  // }
 
 module.exports = typeDefs;

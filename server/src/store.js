@@ -6,10 +6,27 @@ module.exports.createStore = () => {
     storage: './store.sqlite'
   });
 
-  const surveys = db.define('survey', {
+  const Survey = db.define('survey', {
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true,
+    },
     title: Sequelize.STRING,
     totalResponses: Sequelize.INTEGER,
   });
 
-  return { db, surveys };
+  const SurveyResponse = db.define('surveyResponse', {
+    count: Sequelize.INTEGER,
+    text: Sequelize.STRING,
+    rank: Sequelize.INTEGER,
+    surveyId: {
+      type: Sequelize.UUID,
+      references: {
+        model: Survey,
+        key: 'id'
+      }
+    },    
+  });  
+
+  return { db, Survey, SurveyResponse };
 };

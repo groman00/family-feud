@@ -1,13 +1,7 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { Surveys } from './__generated__/Surveys';
-
-// Todo: Generate types file.
-// type Survey = {
-//   id: string;
-//   title: string;
-//   totalResponses: number;
-// }
+import Survey from './Survey';
 
 const SURVEYS = gql`
   query Surveys {
@@ -15,6 +9,12 @@ const SURVEYS = gql`
       id
       title
       totalResponses
+      responses {
+        id
+        text
+        count
+        rank
+      }
     }
   }
 `;
@@ -26,16 +26,18 @@ const SurveyList: React.FC = () => {
   if (error) return <p>Error :(</p>;
   
   const { surveys } = data!;
-  
+  const [firstSurvey] = surveys;
+
   return (
     <div>
-      {surveys.map(({ id, title, totalResponses }) => (
+      {/* {surveys.map(({ id, title, totalResponses }) => (
         <div key={id}>
           <p>
             {id}: {title} | {totalResponses}
           </p>
         </div>
-      ))}
+      ))} */}
+      <Survey {...firstSurvey} />
     </div>
   );
 };

@@ -16,12 +16,12 @@ class SurveyDataSource extends DataSource {
     this.context = config.context;
   }
 
-  surveyReducer(survey) {
+  surveyReducer({ id, title, totalResponses, responses }) {
     return {
-      id: survey.id,
-      title: survey.title,
-      totalResponses: survey.totalResponses,
-      responses: [],
+      id,
+      title,
+      totalResponses,
+      responses,
     };
   }
 
@@ -34,6 +34,19 @@ class SurveyDataSource extends DataSource {
       }
     ];
     return response.map(response => this.surveyReducer(response));
+  }
+
+  async getSurveyResponses(surveyId) {
+    const surveyResponse = {
+      surveyId: 123,
+      id: 1,
+      text: "This is the first response",
+      count: 12,
+      rank: 1,
+    };
+    // return response.map(response => this.surveyReducer(response));
+    // return this.surveyResponseReducer(surveyResponse);    
+    return [surveyResponse];
   }
 }
 
