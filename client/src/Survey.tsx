@@ -10,10 +10,10 @@ const Survey: React.FC<Props> = ({
 }) => {
   
   return (
-    <div>
+    <button>
       <h1>{title}</h1>
       <h3>Total Answers: {totalAnswers}</h3>
-    </div>
+    </button>
   );
 };
 

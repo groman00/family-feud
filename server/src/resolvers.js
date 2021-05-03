@@ -1,11 +1,7 @@
 module.exports = {
   Query: {
     surveys: async (_, { }, { models }) => {
-      // const surveys =  await dataSources.surveyAPI.getAllSurveys();
-      // return surveys;
       return models.Survey.findAll();
-      // console.log(models);
-      return [];
     },
     // launch: (_, { id }, { dataSources }) =>
     //   dataSources.launchAPI.getLaunchById({ launchId: id }),
