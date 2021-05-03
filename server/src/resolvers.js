@@ -6,12 +6,19 @@ module.exports = {
     // launch: (_, { id }, { dataSources }) =>
     //   dataSources.launchAPI.getLaunchById({ launchId: id }),
   },
-  // Survey: {
+  Survey: {
   //   responses: async (parent, { }, { dataSources }) => {      
   //     const surveyResponses =  await dataSources.surveyAPI.getSurveyResponses(parent.id);
   //     return surveyResponses;
   //   }
-  // }  
+    answers: async (parent, args, { models }) => {
+      return models.Answer.findAll({
+        where: {
+          surveyId: parent.id
+        }
+      });
+    },  
+  }  
 
   // Mutation:  {
     // createSurvey: async (_, { title }, { dataSources }) => {

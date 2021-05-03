@@ -10,9 +10,9 @@
 export interface Surveys_surveys_answers {
   __typename: "Answer";
   id: string;
-  text: string | null;
-  count: number | null;
-  rank: number | null;
+  text: string;
+  count: number;
+  rank: number;
 }
 
 export interface Surveys_surveys {
@@ -20,7 +20,7 @@ export interface Surveys_surveys {
   id: string;
   title: string | null;
   totalAnswers: number | null;
-  answers: (Surveys_surveys_answers | null)[] | null;
+  answers: Surveys_surveys_answers[];
 }
 
 export interface Surveys {

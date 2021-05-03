@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Surveys from './Surveys'
+import Surveys from './components/Surveys'
 
 function App() {
   return (

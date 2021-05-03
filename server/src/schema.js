@@ -4,16 +4,16 @@ const typeDefs = gql`
   type Answer {
     id: ID!
     surveyId: ID!
-    count: Int
-    text: String
-    rank: Int
+    count: Int!
+    text: String!
+    rank: Int!
   }
 
   type Survey {
     id: ID!
     title: String
     totalAnswers: Int
-    answers: [Answer]
+    answers: [Answer!]!
   }
   
   type Query {
