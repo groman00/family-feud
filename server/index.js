@@ -1,12 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./src/schema');
-// const SurveyAPI = require('./src/datasources/survey');
 const resolvers = require('./src/resolvers');
 const models = require('./models')
-
-// const dataSources = () => ({
-//   surveyAPI: new SurveyAPI({ store }),
-// });
 
 const server = new ApolloServer({
   typeDefs,

@@ -3,7 +3,7 @@ module.exports = {
     surveys: async (_, { }, { models }) => {
       // const surveys =  await dataSources.surveyAPI.getAllSurveys();
       // return surveys;
-      // return models.Survey.findAll();
+      return models.Survey.findAll();
       // console.log(models);
       return [];
     },
