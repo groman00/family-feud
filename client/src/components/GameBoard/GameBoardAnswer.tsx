@@ -1,8 +1,8 @@
 import React from 'react'
-import { Surveys_surveys_answers } from '../__generated__/Surveys';
+import { Answer } from '../../graphql/generated/types';
 
 interface Props {
-  answer: Surveys_surveys_answers;
+  answer: Answer;
 }
 export const GameBoardAnswer: React.FC<Props> = ({ answer }) => {
   const [revealed, setRevealed] = React.useState(false);

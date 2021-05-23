@@ -1,10 +1,10 @@
 import React from 'react';
-import { Surveys_surveys_answers } from '../__generated__/Surveys';
+import { Answer } from '../../graphql/generated/types';
 import { GameBoardAnswer } from './GameBoardAnswer';
 import './GameBoard.css';
 
 interface Props {
-  answers: Surveys_surveys_answers[]   
+  answers: Answer[]   
 }
 
 export const GameBoard: React.FC<Props> = ({ answers }) => {

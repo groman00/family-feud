@@ -1,0 +1,14 @@
+query Surveys {
+  surveys {
+    id
+    title
+    totalAnswers
+    answers {
+      id
+      surveyId
+      text
+      count
+      rank
+    }
+  }
+}

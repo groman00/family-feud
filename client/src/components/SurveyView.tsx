@@ -1,16 +1,19 @@
 import React from 'react';
-import { Surveys_surveys } from './__generated__/Surveys';
+import { Survey } from '../graphql/generated/types';
 import { GameBoard } from './GameBoard';
 
-type Props = Surveys_surveys;
+interface Props {
+  survey: Survey;
+};
 
-const Survey: React.FC<Props> = ({
-  // id,
-  answers,
-  title,
-  totalAnswers,
+const SurveyView: React.FC<Props> = ({
+  survey
 }) => {
-  
+  const {
+    answers,
+    title,
+    totalAnswers,
+  } = survey;
   return (
     <div>
       <h1>{title}</h1>
@@ -20,4 +23,4 @@ const Survey: React.FC<Props> = ({
   );
 };
 
-export default Survey;
+export default SurveyView;

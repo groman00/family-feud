@@ -1,36 +1,23 @@
 import React from 'react';
-import { useQuery, gql } from '@apollo/client';
-import { Surveys, Surveys_surveys } from './__generated__/Surveys';
-import Survey from './Survey';
-
-const SURVEYS = gql`
-  query Surveys {
-    surveys {
-      id
-      title
-      totalAnswers
-      answers {
-        id
-        text
-        count
-        rank
-      }
-    }
-  }
-`;
+import { useSurveysQuery, Survey } from '../graphql/generated/types';
+import SurveyView from './SurveyView';
 
 const SurveyList: React.FC = () => {
-  const { loading, error, data } = useQuery<Surveys>(SURVEYS);
-  const [selectedSurvey, setSelectedSurvey] = React.useState<Surveys_surveys>();
+  const { loading, error, data } = useSurveysQuery();
+  const [selectedSurvey, setSelectedSurvey] = React.useState<Survey>();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   
   const { surveys } = data!;
 
   if (selectedSurvey) {
-    return <Survey {...selectedSurvey} />;
+    return <SurveyView survey={selectedSurvey} />;
   }
   
+  if (surveys.length === 0) {
+    return <p>No Surveys</p>;
+  }
+
   return (
     <div>
       {
