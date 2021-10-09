@@ -1,3 +1,4 @@
+import React from 'react';
 import { Survey } from '../graphql/generated/types';
 
 interface CurrentGame {
@@ -35,3 +36,14 @@ export function reducer(state: State, action: Action): State {
       throw new Error();
   }
 }
+
+export const useReducerWithMiddleware = (): [State, React.Dispatch<Action>] => {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+ 
+  const dispatchWithMiddleware = (action: Action) => {
+    console.log(action);
+    dispatch(action);
+  };
+ 
+  return [state, dispatchWithMiddleware];
+};

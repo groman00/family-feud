@@ -11,6 +11,7 @@ export const Game: React.FC = () => {
   }
 
   const { survey } = currentGame;
+  
   return (
     <div className="game-board">
       { survey.answers.map(answer => <GameBoardAnswer answer={answer}/>) }
