@@ -3,12 +3,16 @@ import './App.css';
 import Surveys from '../Surveys';
 import { AppContext } from '../../contexts';
 import { reducer, initialState, Action } from '../../store';
+import { Game } from '../Game'
 
 function App() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  if (state.currentGame) {
-    return <>playing</>;
+  const toComponent = () => {
+    if (state.currentGame) {
+      return <Game />;
+    }
+    return <Surveys />;
   }
 
   return (
@@ -19,10 +23,10 @@ function App() {
             console.log(action);
             dispatch(action);
           },
-          // state,
+          state,
         }}
       >
-        <Surveys />
+        { toComponent() }
       </AppContext.Provider>
     </div>
   );

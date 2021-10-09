@@ -3,7 +3,6 @@ import { AppContext } from '../../contexts';
 import { Survey } from '../../graphql/generated/types';
 import { ActionTypes } from '../../store';
 
-
 interface Props {
   survey: Survey;
 };
@@ -22,7 +21,10 @@ const SurveyView: React.FC<Props> = ({
       <h3>Total Answers: {totalAnswers}</h3>
       <button 
         onClick={() => dispatch({ 
-          type: ActionTypes.PlayGame 
+          type: ActionTypes.PlayGame,
+          payload: {
+            survey
+          }
         })}
       >
         Play Game

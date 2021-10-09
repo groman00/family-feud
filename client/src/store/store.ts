@@ -4,7 +4,7 @@ interface CurrentGame {
   survey: Survey
 }
 
-interface State {
+export interface State {
   currentGame: CurrentGame | undefined
 }
 
@@ -12,7 +12,12 @@ export enum ActionTypes {
   PlayGame = 'playGame'
 }
 
-export type Action = { type: ActionTypes.PlayGame }
+export type Action = { 
+  type: ActionTypes.PlayGame,
+  payload: {
+    survey: Survey
+  }
+}
 
 export const initialState: State = {
   currentGame: undefined
@@ -22,7 +27,9 @@ export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionTypes.PlayGame:
       return {
-        currentGame: undefined
+        currentGame: {
+          survey: action.payload.survey
+        }
       };
     default:
       throw new Error();

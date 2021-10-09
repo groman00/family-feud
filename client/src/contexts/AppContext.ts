@@ -1,8 +1,9 @@
 import React from "react";
-import { Action } from "../store";
+import { Action, State } from "../store";
 
 interface Context {
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<Action>,
+  state: State
 }
 
 export const AppContext = React.createContext<Context>({} as Context);
