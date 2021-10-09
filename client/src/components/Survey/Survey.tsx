@@ -1,6 +1,8 @@
 import React from 'react';
+import { AppContext } from '../../contexts';
 import { Survey } from '../../graphql/generated/types';
-import { GameBoard } from '../GameBoard';
+import { ActionTypes } from '../../store';
+
 
 interface Props {
   survey: Survey;
@@ -9,8 +11,8 @@ interface Props {
 const SurveyView: React.FC<Props> = ({
   survey
 }) => {
+  const { dispatch } = React.useContext(AppContext)
   const {
-    answers,
     title,
     totalAnswers,
   } = survey;
@@ -18,7 +20,13 @@ const SurveyView: React.FC<Props> = ({
     <div>
       <h1>{title}</h1>
       <h3>Total Answers: {totalAnswers}</h3>
-      { answers && <GameBoard answers={answers}/> }
+      <button 
+        onClick={() => dispatch({ 
+          type: ActionTypes.PlayGame 
+        })}
+      >
+        Play Game
+      </button>
     </div>
   );
 };

@@ -1,26 +1,29 @@
 import React from 'react';
-// import logo from '../../logo.svg';
 import './App.css';
 import Surveys from '../Surveys';
+import { AppContext } from '../../contexts';
+import { reducer, initialState, Action } from '../../store';
 
 function App() {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  if (state.currentGame) {
+    return <>playing</>;
+  }
+
   return (
     <div className="App">
-      <Surveys />
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
+      <AppContext.Provider 
+        value={{
+          dispatch: (action: Action) => {
+            console.log(action);
+            dispatch(action);
+          },
+          // state,
+        }}
+      >
+        <Surveys />
+      </AppContext.Provider>
     </div>
   );
 }
