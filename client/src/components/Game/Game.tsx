@@ -14,6 +14,7 @@ export const Game: React.FC = () => {
   
   return (
     <div className="game-board">
+      <h1>{ survey.title }</h1>
       { survey.answers.map(answer => <GameBoardAnswer answer={answer}/>) }
     </div>
   );

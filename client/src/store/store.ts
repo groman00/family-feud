@@ -41,7 +41,7 @@ export const useReducerWithMiddleware = (): [State, React.Dispatch<Action>] => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
  
   const dispatchWithMiddleware = (action: Action) => {
-    console.log(action);
+    console.log('dispatch', action);
     dispatch(action);
   };
  
