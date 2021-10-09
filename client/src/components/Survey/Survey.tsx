@@ -1,6 +1,6 @@
 import React from 'react';
-import { Survey } from '../graphql/generated/types';
-import { GameBoard } from './GameBoard';
+import { Survey } from '../../graphql/generated/types';
+import { GameBoard } from '../GameBoard';
 
 interface Props {
   survey: Survey;

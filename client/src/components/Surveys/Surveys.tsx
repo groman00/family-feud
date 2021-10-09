@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSurveysQuery, Survey } from '../graphql/generated/types';
-import SurveyView from './SurveyView';
+import { useSurveysQuery, Survey } from '../../graphql/generated/types';
+import SurveyView from '../Survey';
 
 const SurveyList: React.FC = () => {
   const { loading, error, data } = useSurveysQuery();
