@@ -15,10 +15,23 @@ const typeDefs = gql`
     totalAnswers: Int
     answers: [Answer!]!
   }
-  
+
+  type Game {
+    token: String
+  }
+
+  type GameCreatedResponse {
+    game: Game!
+  }  
+
   type Query {
     surveys: [Survey!]!
     survey(id: ID!): Survey
+    games: [Game]
+  }
+
+  type Mutation {
+    createGame: GameCreatedResponse
   }
 `;
 
@@ -29,7 +42,6 @@ const typeDefs = gql`
   // }
 
   // type Mutation {
-  //   createSurvey(title: String): SurveyResponse
+    //   createSurvey(title: String): SurveyResponse
   // }
-
 module.exports = typeDefs;

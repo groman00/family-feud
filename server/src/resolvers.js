@@ -3,14 +3,11 @@ module.exports = {
     surveys: async (_, { }, { models }) => {
       return models.Survey.findAll();
     },
-    // launch: (_, { id }, { dataSources }) =>
-    //   dataSources.launchAPI.getLaunchById({ launchId: id }),
+    games: async (_, { }, { models }) => {
+      return models.Game.findAll();
+    },    
   },
   Survey: {
-  //   responses: async (parent, { }, { dataSources }) => {      
-  //     const surveyResponses =  await dataSources.surveyAPI.getSurveyResponses(parent.id);
-  //     return surveyResponses;
-  //   }
     answers: async (parent, args, { models }) => {
       return models.Answer.findAll({
         where: {
@@ -18,9 +15,20 @@ module.exports = {
         }
       });
     },  
-  }  
+  },
+  Game: {},
 
-  // Mutation:  {
+  Mutation:  {
+    createGame: async (_, {}, { models }) => {
+      const game = models.Game.build({
+        token: Date.now().toString()
+      });
+      game.save();
+      
+      return {
+        game
+      }
+    }
     // createSurvey: async (_, { title }, { dataSources }) => {
       // const results = await dataSources.userAPI.bookTrips({ launchIds });
 
@@ -36,5 +44,5 @@ module.exports = {
       //   survey,
       // };
     // },
-  // },
+  },
 };
