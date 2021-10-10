@@ -23,6 +23,13 @@ module.exports = {
       const game = models.Game.build({
         token: Date.now().toString()
       });
+
+      // Testing: Clear all games
+      // models.Game.destroy({
+      //   where: {},
+      //   truncate: true
+      // });
+
       game.save();
       
       return {
