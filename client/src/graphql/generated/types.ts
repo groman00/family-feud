@@ -31,10 +31,26 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Game = {
+  __typename?: 'Game';
+  token?: Maybe<Scalars['String']>;
+};
+
+export type GameCreatedResponse = {
+  __typename?: 'GameCreatedResponse';
+  game: Game;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createGame?: Maybe<GameCreatedResponse>;
+};
+
 export type Query = {
   __typename?: 'Query';
   surveys: Array<Survey>;
   survey?: Maybe<Survey>;
+  games?: Maybe<Array<Maybe<Game>>>;
 };
 
 
@@ -50,6 +66,20 @@ export type Survey = {
   answers: Array<Answer>;
 };
 
+
+export type CreateGameMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateGameMutation = (
+  { __typename?: 'Mutation' }
+  & { createGame?: Maybe<(
+    { __typename?: 'GameCreatedResponse' }
+    & { game: (
+      { __typename?: 'Game' }
+      & Pick<Game, 'token'>
+    ) }
+  )> }
+);
 
 export type SurveysQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -67,6 +97,40 @@ export type SurveysQuery = (
 );
 
 
+export const CreateGameDocument = gql`
+    mutation CreateGame {
+  createGame {
+    game {
+      token
+    }
+  }
+}
+    `;
+export type CreateGameMutationFn = Apollo.MutationFunction<CreateGameMutation, CreateGameMutationVariables>;
+
+/**
+ * __useCreateGameMutation__
+ *
+ * To run a mutation, you first call `useCreateGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateGameMutation(baseOptions?: Apollo.MutationHookOptions<CreateGameMutation, CreateGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateGameMutation, CreateGameMutationVariables>(CreateGameDocument, options);
+      }
+export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
+export type CreateGameMutationResult = Apollo.MutationResult<CreateGameMutation>;
+export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMutation, CreateGameMutationVariables>;
 export const SurveysDocument = gql`
     query Surveys {
   surveys {
