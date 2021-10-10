@@ -1,14 +1,14 @@
-module.exports = {
+module.exports = (models, pubsub) => ({
   Query: {
-    surveys: async (_, { }, { models }) => {
+    surveys: async () => {
       return models.Survey.findAll();
     },
-    games: async (_, { }, { models }) => {
+    games: async () => {
       return models.Game.findAll();
     },    
   },
   Survey: {
-    answers: async (parent, args, { models }) => {
+    answers: async (parent) => {
       return models.Answer.findAll({
         where: {
           surveyId: parent.id
@@ -19,7 +19,7 @@ module.exports = {
   Game: {},
 
   Mutation:  {
-    createGame: async (_, {}, { models }) => {
+    createGame: async () => {
       const game = models.Game.build({
         token: Date.now().toString()
       });
@@ -32,24 +32,16 @@ module.exports = {
 
       game.save();
       
+      pubsub.publish('GAME_CREATED', { gameCreated: game });
+
       return {
         game
       }
     }
-    // createSurvey: async (_, { title }, { dataSources }) => {
-      // const results = await dataSources.userAPI.bookTrips({ launchIds });
-
-      // const launches = await dataSources.launchAPI.getLaunchesByIds({
-      //   launchIds,
-      // });
-      // const survey = {
-
-      // }
-      // return {
-      //   success: true,
-      //   message: 'survey created'
-      //   survey,
-      // };
-    // },
   },
-};
+  Subscription: {
+    gameCreated: {
+      subscribe: () => pubsub.asyncIterator(['GAME_CREATED']),
+    },
+  },  
+});

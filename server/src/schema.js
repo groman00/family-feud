@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Answer {
@@ -33,15 +33,10 @@ const typeDefs = gql`
   type Mutation {
     createGame: GameCreatedResponse
   }
+  
+  type Subscription {
+    gameCreated: Game
+  }
 `;
 
-  // type SurveyCreatedResponse {
-  //   success: Boolean!
-  //   message: String
-  //   survey: Survey
-  // }
-
-  // type Mutation {
-    //   createSurvey(title: String): SurveyResponse
-  // }
 module.exports = typeDefs;

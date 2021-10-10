@@ -58,6 +58,11 @@ export type QuerySurveyArgs = {
   id: Scalars['ID'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  gameCreated?: Maybe<Game>;
+};
+
 export type Survey = {
   __typename?: 'Survey';
   id: Scalars['ID'];
@@ -78,6 +83,17 @@ export type CreateGameMutation = (
       { __typename?: 'Game' }
       & Pick<Game, 'token'>
     ) }
+  )> }
+);
+
+export type OnGameCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnGameCreatedSubscription = (
+  { __typename?: 'Subscription' }
+  & { gameCreated?: Maybe<(
+    { __typename?: 'Game' }
+    & Pick<Game, 'token'>
   )> }
 );
 
@@ -131,6 +147,35 @@ export function useCreateGameMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
 export type CreateGameMutationResult = Apollo.MutationResult<CreateGameMutation>;
 export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMutation, CreateGameMutationVariables>;
+export const OnGameCreatedDocument = gql`
+    subscription OnGameCreated {
+  gameCreated {
+    token
+  }
+}
+    `;
+
+/**
+ * __useOnGameCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnGameCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnGameCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnGameCreatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnGameCreatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnGameCreatedSubscription, OnGameCreatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnGameCreatedSubscription, OnGameCreatedSubscriptionVariables>(OnGameCreatedDocument, options);
+      }
+export type OnGameCreatedSubscriptionHookResult = ReturnType<typeof useOnGameCreatedSubscription>;
+export type OnGameCreatedSubscriptionResult = Apollo.SubscriptionResult<OnGameCreatedSubscription>;
 export const SurveysDocument = gql`
     query Surveys {
   surveys {
