@@ -1,24 +1,28 @@
 import React from 'react';
-import { Survey } from '../graphql/generated/types';
-
-interface CurrentGame {
-  survey: Survey
-}
+import { Survey, Game } from '../graphql/generated/types';
 
 export interface State {
-  currentGame: CurrentGame | undefined
+  currentGame: Game | undefined
 }
 
 export enum ActionTypes {
-  PlayGame = 'playGame'
+  JoinExistingGame = 'joinExistingGame',
+  PlayNewGame = 'playNewGame',
+  SetCurrentGame = 'setCurrentGame',
 }
 
-export type Action = { 
-  type: ActionTypes.PlayGame,
-  payload: {
-    survey: Survey
-  }
-}
+export type Action = 
+  { 
+    type: ActionTypes.JoinExistingGame,
+    payload: {
+      token: Game["token"]
+    }
+  } 
+  | { type: ActionTypes.PlayNewGame }
+  | { 
+      type: ActionTypes.SetCurrentGame,
+      payload: Partial<Game>
+    }
 
 export const initialState: State = {
   currentGame: undefined
@@ -26,12 +30,23 @@ export const initialState: State = {
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case ActionTypes.PlayGame:
+    case ActionTypes.JoinExistingGame:
       return {
         currentGame: {
-          survey: action.payload.survey
+          token: action.payload.token
         }
       };
+    case ActionTypes.PlayNewGame:
+      return {
+        currentGame: {}
+      };  
+    case ActionTypes.SetCurrentGame:
+      return {
+        currentGame: {
+          ...action.payload,
+          ...state.currentGame,
+        }
+      };            
     default:
       throw new Error();
   }

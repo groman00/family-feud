@@ -1,44 +1,51 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { GameBoardAnswer } from './GameBoardAnswer';
-import './GameBoard.css';
+import React, { useContext, useEffect } from 'react';
 import { AppContext } from '../../contexts';
 import { useCreateGameMutation } from '../../graphql/generated/types';
+import { ActionTypes } from '../../store';
+
+import './GameBoard.css';
 
 export const Game: React.FC = () => {
-  const { state: { currentGame } } = useContext(AppContext);
-  const [token, setToken] = useState<string>();
+  const { dispatch, state: { currentGame } } = useContext(AppContext);
   const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
     variables: {},
   });
   
-  console.log(data, loading, error);
+  console.log(currentGame, data, loading, error);
 
   useEffect(() => {
-    if (!token) {
-      console.log('Creating New Game.')
-      createGameMutation();
+    if (currentGame?.token) {
+      return;
     }
-  }, [token, createGameMutation]);
+
+    console.log('Creating New Game.')
+    createGameMutation();
+  }, [currentGame, createGameMutation]);
 
   useEffect(() => {
-    setToken(data?.createGame?.game.token ?? undefined);
+    if (data?.createGame?.game) {
+      dispatch({
+        type: ActionTypes.SetCurrentGame,
+        payload: data?.createGame?.game ?? {}
+      });
+    }
   }, [data]);  
 
   if (loading) {
     return <>Loading</>
   }
 
-  if (error || !currentGame) {
+  if (error) {
     return <>Error</>
   }
   
-  if (token) {
-    const { survey } = currentGame;
+  if (currentGame?.token) {
+    // const { survey } = currentGame;
 
     return (
       <div className="game-board">
-        <h1>{ survey.title }</h1>
-        { survey.answers.map((answer, i) => <GameBoardAnswer key={i} answer={answer}/>) }
+        {/* <h1>{ survey.title }</h1>
+        { survey.answers.map((answer, i) => <GameBoardAnswer key={i} answer={answer}/>) } */}
       </div>
     );
   }

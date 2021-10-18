@@ -20,12 +20,12 @@ const SurveyView: React.FC<Props> = ({
       <h1>{title}</h1>
       <h3>Total Answers: {totalAnswers}</h3>
       <button 
-        onClick={() => dispatch({ 
-          type: ActionTypes.PlayGame,
-          payload: {
-            survey
-          }
-        })}
+        // onClick={() => dispatch({ 
+        //   type: ActionTypes.PlayGame,
+        //   payload: {
+        //     survey
+        //   }
+        // })}
       >
         Play Game
       </button>

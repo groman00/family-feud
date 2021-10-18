@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
-import Surveys from '../Surveys';
+// import Surveys from '../Surveys';
+import { Menu } from '../Menu';
 import { AppContext } from '../../contexts';
 import { useReducerWithMiddleware } from '../../store';
 import { Game } from '../Game'
@@ -19,7 +20,8 @@ function App() {
     if (state.currentGame) {
       return <Game />;
     }
-    return <Surveys />;
+    // return <Surveys />;
+    return <Menu />
   }
 
   return (
