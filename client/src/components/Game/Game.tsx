@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts';
 import { useCreateGameMutation } from '../../graphql/generated/types';
 import { ActionTypes } from '../../store';
@@ -13,6 +13,7 @@ export const Game: React.FC = () => {
   
   console.log(currentGame, data, loading, error);
 
+  // Create game if none exists.
   useEffect(() => {
     if (currentGame?.token) {
       return;
@@ -22,6 +23,7 @@ export const Game: React.FC = () => {
     createGameMutation();
   }, [currentGame, createGameMutation]);
 
+  // Set current game from mutation response.
   useEffect(() => {
     if (data?.createGame?.game) {
       dispatch({
@@ -40,15 +42,57 @@ export const Game: React.FC = () => {
   }
   
   if (currentGame?.token) {
-    // const { survey } = currentGame;
-
-    return (
-      <div className="game-board">
-        {/* <h1>{ survey.title }</h1>
-        { survey.answers.map((answer, i) => <GameBoardAnswer key={i} answer={answer}/>) } */}
-      </div>
-    );
+    return <Host />;
   }
 
   return null;
+}
+
+
+const Host: React.FC = () => {
+  const [strikes, setStrikes] = useState(0);
+/* 
+Survey
+Host
+Teams
+Points
+Strikes
+Team {
+  Players
+  ActivePlayer
+  TotalPoints
+}
+Player {
+  name
+}
+*/
+
+
+
+
+
+  return (
+    <div>
+      <div>
+        Strikes: {strikes}
+      </div>
+      {
+        strikes < 3 ? (
+          <div>
+            <button>Correct</button>
+            <button onClick={() => setStrikes(strikes => strikes + 1)}>
+              Wrong
+            </button>
+          </div>
+        ): (
+          <div>
+            <h2>Round Over</h2>
+            <button onClick={() => setStrikes(0)}>
+              Start Next Round
+            </button>
+          </div>
+        )
+      }
+    </div>
+  );
 }
