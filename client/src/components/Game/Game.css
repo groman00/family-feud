@@ -1,9 +1,9 @@
-.game-board {
+.answers {
   display: flex;
   flex-direction: column;
 }
 
-.game-board .answer {
+.answer {
   background-color: #5a5aff;
   border: inset 6px #c6a400;
   padding: 1rem 2rem;
@@ -14,11 +14,11 @@
   font-size: 1.25rem;
 }
 
-.game-board button:hover,
-.game-board button:active {
+.answers button:hover,
+.answers button:active {
   background-color: #3e3eb5;
 }
 
-.game-board button:focus {
+.answers button:focus {
   border-color: #7c6801;
 }
