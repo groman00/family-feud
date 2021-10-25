@@ -1,9 +1,26 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { AppContext } from '../../contexts';
+import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
 import { Answer, Survey, useCreateGameMutation, useSurveysQuery } from '../../graphql/generated/types';
 import { ActionTypes } from '../../store';
 
 import './Game.css';
+
+/* 
+Survey
+Host
+Teams
+Points
+Strikes
+Team {
+  Players
+  ActivePlayer
+  TotalPoints
+}
+Player {
+  name
+}
+*/
 
 export const Game: React.FC = () => {
   const { dispatch, state: { currentGame } } = useContext(AppContext);
@@ -42,90 +59,73 @@ export const Game: React.FC = () => {
   }
   
   if (currentGame?.token) {
-    return <Host />;
+    return (
+      <div className="game">
+        <GameProvider>
+          <Status />
+          <Strikes />
+          <Player />
+          <Host />
+        </GameProvider>
+      </div>
+    );
   }
 
   return null;
 }
 
+const Status: React.FC = () => {
+  const { hasEnded, status } = useContext(GameContext);  
+  return (
+    <div>
+      <h3>{status === GameStatus.Win ? 'Winner' : 'In progress'}</h3>
+      <h3>{hasEnded && 'Round Over'}</h3>
+    </div>
+  );
+}
 
-/* 
-Survey
-Host
-Teams
-Points
-Strikes
-Team {
-  Players
-  ActivePlayer
-  TotalPoints
+const Strikes: React.FC = () => {
+  const { strikes } = useContext(GameContext);  
+  return <div>Strikes: {strikes}</div>;
 }
-Player {
-  name
-}
-*/
 
-enum GameStatus {
-  InProgress = 'inProgress',
-  Lose = 'lose',
-  NotStarted = 'notStarted',
-  Steal = 'steal',
-  Win = 'win',
-}
+
+const Answers: React.FC<{ children: (answer: Answer) => React.ReactNode }> = ({ children }) => {
+  const { answers } = useContext(GameContext);  
+  return (
+    <div className="answers">
+      {
+        answers?.map(answer => (
+          <div className="answer" key={answer.id}>
+            {children(answer)}
+          </div>
+        ))
+      }
+    </div>
+  );
+};
 
 const Host: React.FC = () => {
-  const [strikes, setStrikes] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState<Answer['id'][]>([]);
-  const { data } = useSurveysQuery();
-
-  const survey = data?.surveys[0];
-
-  const gameStatus: GameStatus = useMemo(() => {
-    if (!survey) {
-      return GameStatus.NotStarted;
-    }
-    if (strikes > 2) {
-      return GameStatus.Lose;
-    }
-    if (correctAnswers.length === survey.answers.length) {
-      return GameStatus.Win;
-    }
-    return GameStatus.InProgress;
-  }, [
-    correctAnswers, 
-    survey,
-    strikes
-  ]);
-
-  const isGameOver: boolean = useMemo(() => [
-    GameStatus.Win, 
-    GameStatus.Lose
-  ].includes(gameStatus), [gameStatus]);
-
+  const { 
+    correctAnswers,
+    hasEnded,
+    setCorrectAnswers,      
+    setStrikes,
+  } = useContext(GameContext);  
   return (
-    <div className="game">
-      <div>
-        <h2>Survey {gameStatus === GameStatus.Win ? 'winner' : 'in progress'}</h2>
-        <div className="answers">
-          {
-            survey && survey.answers.map(answer => (
-              <label className="answer" key={answer.id}>
-                <span>{answer.text}</span>
-                <input 
-                  type="checkbox" 
-                  disabled={isGameOver ?? correctAnswers.includes(answer.id)}
-                  onChange={(e) => setCorrectAnswers(answers => [...answers, answer.id])}
-                />
-              </label>
-            ))
-          }
-        </div>
-      </div>
-      <div>
-        Strikes: {strikes}
-      </div>
+    <div>
+      <Answers>
+        {answer => (
+          <button 
+            disabled={hasEnded || correctAnswers.includes(answer.id)}
+            onClick={(e) => setCorrectAnswers(answers => [...answers, answer.id])}
+          >
+            {answer.text}
+          </button>
+        )}
+      </Answers>
       {
-        isGameOver ? (
+        hasEnded ? (
           <div>
             <h2>Round Over</h2>
             <button onClick={() => {
@@ -134,15 +134,25 @@ const Host: React.FC = () => {
             }}>
               Start Next Round
             </button>
-          </div>          
-        ): (
-          <div>
-            <button onClick={() => setStrikes(strikes => strikes + 1)}>
-              STRIKE
-            </button>
-          </div>
+          </div>  
+        ) : (
+          <button onClick={() => setStrikes(strikes => strikes + 1)}>
+            STRIKE
+          </button>
         )
-      }
+      }     
     </div>
   );
 }
+
+const Player: React.FC = () => {
+  const { correctAnswers } = useContext(GameContext);  
+  return (
+    <div>
+      <h2>player</h2>
+      <Answers>
+        { answer => correctAnswers.includes(answer.id) && answer.text }
+      </Answers>
+    </div>
+  );
+};

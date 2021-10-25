@@ -14,8 +14,8 @@
   font-size: 1.25rem;
 }
 
-.answers button:hover,
-.answers button:active {
+.answer button:hover,
+.answer button:active {
   background-color: #3e3eb5;
 }
 

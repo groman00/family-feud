@@ -25,7 +25,10 @@ export type Action =
     }
 
 export const initialState: State = {
-  currentGame: undefined
+  // currentGame: undefined
+  currentGame: {
+     token: 'test'
+  }
 };
 
 export function reducer(state: State, action: Action): State {
