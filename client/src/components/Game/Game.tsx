@@ -1,26 +1,12 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AppContext } from '../../contexts';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { Answer, Survey, useCreateGameMutation, useSurveysQuery } from '../../graphql/generated/types';
+import { useCreateGameMutation } from '../../graphql/generated/types';
 import { ActionTypes } from '../../store';
+import { Host } from '../Host';
+import { Player } from '../Player';
 
 import './Game.css';
-
-/* 
-Survey
-Host
-Teams
-Points
-Strikes
-Team {
-  Players
-  ActivePlayer
-  TotalPoints
-}
-Player {
-  name
-}
-*/
 
 export const Game: React.FC = () => {
   const { dispatch, state: { currentGame } } = useContext(AppContext);
@@ -63,7 +49,6 @@ export const Game: React.FC = () => {
       <div className="game">
         <GameProvider>
           <Status />
-          <Strikes />
           <Player />
           <Host />
         </GameProvider>
@@ -75,84 +60,12 @@ export const Game: React.FC = () => {
 }
 
 const Status: React.FC = () => {
-  const { hasEnded, status } = useContext(GameContext);  
+  const { hasEnded, status, strikes } = useContext(GameContext);  
   return (
     <div>
       <h3>{status === GameStatus.Win ? 'Winner' : 'In progress'}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
+      <div>Strikes: {strikes}</div>
     </div>
   );
 }
-
-const Strikes: React.FC = () => {
-  const { strikes } = useContext(GameContext);  
-  return <div>Strikes: {strikes}</div>;
-}
-
-
-const Answers: React.FC<{ children: (answer: Answer) => React.ReactNode }> = ({ children }) => {
-  const { answers } = useContext(GameContext);  
-  return (
-    <div className="answers">
-      {
-        answers?.map(answer => (
-          <div className="answer" key={answer.id}>
-            {children(answer)}
-          </div>
-        ))
-      }
-    </div>
-  );
-};
-
-const Host: React.FC = () => {
-  const { 
-    correctAnswers,
-    hasEnded,
-    setCorrectAnswers,      
-    setStrikes,
-  } = useContext(GameContext);  
-  return (
-    <div>
-      <Answers>
-        {answer => (
-          <button 
-            disabled={hasEnded || correctAnswers.includes(answer.id)}
-            onClick={(e) => setCorrectAnswers(answers => [...answers, answer.id])}
-          >
-            {answer.text}
-          </button>
-        )}
-      </Answers>
-      {
-        hasEnded ? (
-          <div>
-            <h2>Round Over</h2>
-            <button onClick={() => {
-              setStrikes(0);
-              setCorrectAnswers([]);
-            }}>
-              Start Next Round
-            </button>
-          </div>  
-        ) : (
-          <button onClick={() => setStrikes(strikes => strikes + 1)}>
-            STRIKE
-          </button>
-        )
-      }     
-    </div>
-  );
-}
-
-const Player: React.FC = () => {
-  const { correctAnswers } = useContext(GameContext);  
-  return (
-    <div>
-      <h2>player</h2>
-      <Answers>
-        { answer => correctAnswers.includes(answer.id) && answer.text }
-      </Answers>
-    </div>
-  );
-};
