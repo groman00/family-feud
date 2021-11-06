@@ -20,7 +20,6 @@ function App() {
     if (state.currentGame) {
       return <Game />;
     }
-    // return <Surveys />;
     return <Menu />
   }
 

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Answer, Survey, useSurveysQuery } from "../graphql/generated/types";
+import { Answer, useSurveysQuery } from "../graphql/generated/types";
 
 export enum GameStatus {
   InProgress = 'inProgress',

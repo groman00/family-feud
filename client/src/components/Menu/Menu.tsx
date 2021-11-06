@@ -1,23 +1,15 @@
 import React from 'react';
-import { AppContext } from '../../contexts';
-import { ActionTypes } from '../../store';
+import { useCreateGame } from '../../hooks';
 import './Menu.css';
 
 export const Menu: React.FC = () => {
-  const { dispatch } = React.useContext(AppContext)
-
-
-  // dispatch({
-  //   type: ActionTypes.PlayNewGame,
-  // })
+  const createGameMutation = useCreateGame();
 
   return (
     <div className="menu">
       <div>
         <button 
-          onClick={() => dispatch({
-            type: ActionTypes.PlayNewGame,
-          })}
+          onClick={() => createGameMutation()}
         >
           Create Game
         </button>

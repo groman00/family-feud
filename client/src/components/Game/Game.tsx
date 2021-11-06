@@ -1,49 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from '../../contexts';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useCreateGameMutation } from '../../graphql/generated/types';
-import { ActionTypes } from '../../store';
 import { Host } from '../Host';
 import { Player } from '../Player';
 
 import './Game.css';
 
 export const Game: React.FC = () => {
-  const { dispatch, state: { currentGame } } = useContext(AppContext);
-  const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
-    variables: {},
-  });
-  
-  console.log(currentGame, data, loading, error);
+  const { state: { currentGame } } = useContext(AppContext);
 
-  // Create game if none exists.
-  useEffect(() => {
-    if (currentGame?.token) {
-      return;
-    }
-
-    console.log('Creating New Game.')
-    createGameMutation();
-  }, [currentGame, createGameMutation]);
-
-  // Set current game from mutation response.
-  useEffect(() => {
-    if (data?.createGame?.game) {
-      dispatch({
-        type: ActionTypes.SetCurrentGame,
-        payload: data?.createGame?.game ?? {}
-      });
-    }
-  }, [data]);  
-
-  if (loading) {
-    return <>Loading</>
-  }
-
-  if (error) {
-    return <>Error</>
-  }
-  
   if (currentGame?.token) {
     return (
       <div className="game">

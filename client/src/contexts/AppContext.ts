@@ -1,8 +1,8 @@
 import React from "react";
-import { Action, State } from "../store";
+import { Dispatch, State } from "../store";
 
 interface Context {
-  dispatch: React.Dispatch<Action>,
+  dispatch: Dispatch,
   state: State
 }
 

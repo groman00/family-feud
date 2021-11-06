@@ -7,28 +7,26 @@ export interface State {
 
 export enum ActionTypes {
   JoinExistingGame = 'joinExistingGame',
-  PlayNewGame = 'playNewGame',
   SetCurrentGame = 'setCurrentGame',
 }
 
+export type ActionCreator = (dispatch: React.Dispatch<Action>) => void;
+
 export type Action = 
-  { 
-    type: ActionTypes.JoinExistingGame,
-    payload: {
-      token: Game["token"]
-    }
-  } 
-  | { type: ActionTypes.PlayNewGame }
+  | { 
+      type: ActionTypes.JoinExistingGame,
+      payload: {
+        token: Game["token"]
+      }
+    } 
   | { 
       type: ActionTypes.SetCurrentGame,
       payload: Partial<Game>
-    }
+    };
 
 export const initialState: State = {
-  // currentGame: undefined
-  currentGame: {
-     token: 'test'
-  }
+  currentGame: undefined
+  // currentGame: { token: 'test' }
 };
 
 export function reducer(state: State, action: Action): State {
@@ -39,10 +37,10 @@ export function reducer(state: State, action: Action): State {
           token: action.payload.token
         }
       };
-    case ActionTypes.PlayNewGame:
-      return {
-        currentGame: {}
-      };  
+    // case ActionTypes.PlayNewGame:
+    //   return {
+    //     currentGame: {}
+    //   };  
     case ActionTypes.SetCurrentGame:
       return {
         currentGame: {
@@ -55,12 +53,20 @@ export function reducer(state: State, action: Action): State {
   }
 }
 
-export const useReducerWithMiddleware = (): [State, React.Dispatch<Action>] => {
+type DispatchableAction = Action | ActionCreator;
+
+export type Dispatch = React.Dispatch<DispatchableAction>;
+
+export const useReducerWithMiddleware = (): [State, Dispatch] => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
  
-  const dispatchWithMiddleware = (action: Action) => {
+  const dispatchWithMiddleware = (action: DispatchableAction) => {
     console.log('dispatch', action);
-    dispatch(action);
+    if (typeof action === 'function') {
+      action(dispatch);
+    } else {
+      dispatch(action);
+    }
   };
  
   return [state, dispatchWithMiddleware];
