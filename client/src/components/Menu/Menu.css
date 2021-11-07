@@ -5,3 +5,7 @@
   padding: 5em;
   height: 15vh;  
 }
+
+.menu label {
+  display: block;
+}

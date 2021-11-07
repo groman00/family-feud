@@ -37,6 +37,15 @@ module.exports = (models, pubsub) => ({
       return {
         game
       }
+    },
+    joinGame: async (_, { token, playerName }) => {
+      const game = await models.Game.findOne({
+        where: {
+          token
+        }
+      });
+      console.log(token, playerName, game);
+      return { game };
     }
   },
   Subscription: {
