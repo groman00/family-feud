@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-// import Surveys from '../Surveys';
 import { Menu } from '../Menu';
 import { AppContext } from '../../contexts';
 import { useReducerWithMiddleware } from '../../store';
@@ -14,7 +13,7 @@ function App() {
     variables: {},
   });  
   
-  console.log('subscription data', loading, data, error);
+  console.log('GAME CREATED', loading, data, error);
 
   const toComponent = () => {
     if (state.currentGame) {

@@ -44,7 +44,8 @@ module.exports = (models, pubsub) => ({
           token
         }
       });
-      console.log(token, playerName, game);
+      // console.log(token, playerName, game);
+      pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       return { game };
     }
   },
