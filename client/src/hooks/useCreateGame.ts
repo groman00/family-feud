@@ -4,7 +4,7 @@ import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
 
 export const useCreateGame = () => {
-  const { dispatch } = useContext(AppContext)
+  const { dispatch } = useContext(AppContext);
   const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
     variables: {},
   });

@@ -52,5 +52,8 @@ module.exports = (models, pubsub) => ({
     gameCreated: {
       subscribe: () => pubsub.asyncIterator(['GAME_CREATED']),
     },
+    playerJoined: {
+      subscribe: () => pubsub.asyncIterator(['PLAYER_JOINED']),
+    },    
   },  
 });
