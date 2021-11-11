@@ -20,9 +20,17 @@ module.exports = (models, pubsub) => ({
 
   Mutation:  {
     createGame: async () => {
+      const token = Date.now().toString();       
       const game = models.Game.build({
-        token: Date.now().toString()
+        token,
       });
+      await game.save();
+
+      const player = models.Player.build({
+        name: 'host',
+      });    
+      await player.setGame(game);
+      await player.save();         
 
       // Testing: Clear all games
       // models.Game.destroy({
@@ -30,12 +38,11 @@ module.exports = (models, pubsub) => ({
       //   truncate: true
       // });
 
-      game.save();
-      
       pubsub.publish('GAME_CREATED', { gameCreated: game });
 
       return {
         game
+        // players
       }
     },
     joinGame: async (_, { token, playerName }) => {
@@ -44,7 +51,6 @@ module.exports = (models, pubsub) => ({
           token
         }
       });
-      // console.log(token, playerName, game);
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       return { game };
     }
