@@ -18,7 +18,8 @@ interface Context {
   setCorrectAnswers: React.Dispatch<React.SetStateAction<AnswerIds>>,  
   setStrikes: React.Dispatch<React.SetStateAction<number>>,
   strikes: number,
-  correctAnswers: AnswerIds
+  correctAnswers: AnswerIds,
+  title: string
 }
 
 export const GameContext = React.createContext<Context>({} as Context);
@@ -61,6 +62,7 @@ export const GameProvider: React.FC = ({ children }) => {
       setCorrectAnswers,      
       setStrikes,
       strikes,
+      title: survey?.title ?? '',
     }}>
       {children}
     </GameContext.Provider>

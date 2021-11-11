@@ -33,9 +33,10 @@ export const Game: React.FC = () => {
 }
 
 const Status: React.FC = () => {
-  const { hasEnded, status, strikes } = useContext(GameContext);  
+  const { hasEnded, status, strikes, title } = useContext(GameContext);  
   return (
     <div>
+      <h1>{title}</h1>
       <h3>{status === GameStatus.Win ? 'Winner' : 'In progress'}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
       <div>Strikes: {strikes}</div>
