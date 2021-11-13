@@ -16,8 +16,14 @@ const typeDefs = gql`
     answers: [Answer!]!
   }
 
+  type Player {
+    id: ID!
+    name: String
+  }
+
   type Game {
     token: String
+    players: [Player!]!
   }
 
   type GameCreatedResponse {

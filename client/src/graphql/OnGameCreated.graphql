@@ -1,5 +1,8 @@
 subscription OnGameCreated {
   gameCreated {
     token
+    players {
+      name
+    }    
   }
 }

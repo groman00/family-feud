@@ -1,5 +1,8 @@
 subscription OnPlayerJoined {
   playerJoined {
     token
+    players {
+      name
+    }    
   }
 }

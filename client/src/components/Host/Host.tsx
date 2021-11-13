@@ -8,9 +8,12 @@ export const Host: React.FC = () => {
     hasEnded,
     setCorrectAnswers,      
     setStrikes,
+    token
   } = useContext(GameContext);  
   return (
     <div>
+      <h1>Host</h1>
+      <h2>Game Token: {token}</h2>
       <Answers>
         {answer => (
           <button 

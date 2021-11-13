@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
-import { Answer, useSurveysQuery } from "../graphql/generated/types";
+import React, { useContext, useMemo, useState } from "react";
+import { AppContext } from "./AppContext";
+import { Answer, Game, useSurveysQuery } from "../graphql/generated/types";
 
 export enum GameStatus {
   InProgress = 'inProgress',
@@ -20,11 +21,13 @@ interface Context {
   strikes: number,
   correctAnswers: AnswerIds,
   title: string
+  token: Game['token']
 }
 
 export const GameContext = React.createContext<Context>({} as Context);
 
 export const GameProvider: React.FC = ({ children }) => {
+  const { state: { currentGame } } = useContext(AppContext);
   const [strikes, setStrikes] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState<AnswerIds>([]);
   const { data } = useSurveysQuery();
@@ -63,6 +66,7 @@ export const GameProvider: React.FC = ({ children }) => {
       setStrikes,
       strikes,
       title: survey?.title ?? '',
+      token: currentGame?.token
     }}>
       {children}
     </GameContext.Provider>

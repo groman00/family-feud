@@ -16,7 +16,15 @@ module.exports = (models, pubsub) => ({
       });
     },  
   },
-  Game: {},
+  Game: {
+    players: async (parent) => {
+      return models.Player.findAll({
+        where: {
+          gameId: parent.id
+        }
+      });
+    },      
+  },
 
   Mutation:  {
     createGame: async () => {
@@ -51,6 +59,11 @@ module.exports = (models, pubsub) => ({
           token
         }
       });
+      const player = models.Player.build({
+        name: playerName,
+      });    
+      await player.setGame(game);
+      await player.save();               
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       return { game };
     }

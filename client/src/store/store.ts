@@ -34,7 +34,8 @@ export function reducer(state: State, action: Action): State {
     case ActionTypes.JoinExistingGame:
       return {
         currentGame: {
-          token: action.payload.token
+          token: action.payload.token,
+          players: [] // Todo: Fix this
         }
       };
     // case ActionTypes.PlayNewGame:
@@ -44,6 +45,7 @@ export function reducer(state: State, action: Action): State {
     case ActionTypes.SetCurrentGame:
       return {
         currentGame: {
+          players: [], // Todo: Fix this
           ...action.payload,
           ...state.currentGame,
         }

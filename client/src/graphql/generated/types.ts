@@ -26,6 +26,7 @@ export type Answer = {
 export type Game = {
   __typename?: 'Game';
   token?: Maybe<Scalars['String']>;
+  players: Array<Player>;
 };
 
 export type GameCreatedResponse = {
@@ -48,6 +49,12 @@ export type Mutation = {
 export type MutationJoinGameArgs = {
   token: Scalars['String'];
   playerName: Scalars['String'];
+};
+
+export type Player = {
+  __typename?: 'Player';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -86,6 +93,10 @@ export type CreateGameMutation = (
     & { game: (
       { __typename?: 'Game' }
       & Pick<Game, 'token'>
+      & { players: Array<(
+        { __typename?: 'Player' }
+        & Pick<Player, 'name'>
+      )> }
     ) }
   )> }
 );
@@ -103,6 +114,10 @@ export type JoinGameMutation = (
     & { game?: Maybe<(
       { __typename?: 'Game' }
       & Pick<Game, 'token'>
+      & { players: Array<(
+        { __typename?: 'Player' }
+        & Pick<Player, 'name'>
+      )> }
     )> }
   )> }
 );
@@ -115,6 +130,10 @@ export type OnGameCreatedSubscription = (
   & { gameCreated?: Maybe<(
     { __typename?: 'Game' }
     & Pick<Game, 'token'>
+    & { players: Array<(
+      { __typename?: 'Player' }
+      & Pick<Player, 'name'>
+    )> }
   )> }
 );
 
@@ -126,6 +145,10 @@ export type OnPlayerJoinedSubscription = (
   & { playerJoined?: Maybe<(
     { __typename?: 'Game' }
     & Pick<Game, 'token'>
+    & { players: Array<(
+      { __typename?: 'Player' }
+      & Pick<Player, 'name'>
+    )> }
   )> }
 );
 
@@ -150,6 +173,9 @@ export const CreateGameDocument = gql`
   createGame {
     game {
       token
+      players {
+        name
+      }
     }
   }
 }
@@ -184,6 +210,9 @@ export const JoinGameDocument = gql`
   joinGame(token: $token, playerName: $playerName) {
     game {
       token
+      players {
+        name
+      }
     }
   }
 }
@@ -219,6 +248,9 @@ export const OnGameCreatedDocument = gql`
     subscription OnGameCreated {
   gameCreated {
     token
+    players {
+      name
+    }
   }
 }
     `;
@@ -248,6 +280,9 @@ export const OnPlayerJoinedDocument = gql`
     subscription OnPlayerJoined {
   playerJoined {
     token
+    players {
+      name
+    }
   }
 }
     `;

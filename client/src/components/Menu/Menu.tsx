@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { AppContext } from '../../contexts';
-import { useJoinGameMutation } from '../../graphql/generated/types';
+import { Game, useJoinGameMutation } from '../../graphql/generated/types';
 import { useCreateGame } from '../../hooks';
 import { ActionTypes } from '../../store';
 import './Menu.css';
@@ -23,7 +23,7 @@ export const Menu: React.FC = () => {
     if (data?.joinGame?.game) {
       dispatch({
         type: ActionTypes.SetCurrentGame,
-        payload: data.joinGame.game
+        payload: data.joinGame.game as Game
       });
     }
   }, [data, error]);

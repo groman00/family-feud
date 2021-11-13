@@ -24,6 +24,12 @@ export const Game: React.FC = () => {
           <Status />
           <Player />
           <Host />
+          <div>
+            <h2>Players:</h2>
+            <ul>
+              { currentGame.players.map(player => <li>{player.name}</li>)}
+            </ul>
+          </div>
         </GameProvider>
       </div>
     );
