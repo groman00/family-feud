@@ -3,6 +3,7 @@ mutation JoinGame($token: String!, $playerName: String!) {
     game {
       token
       players {
+        id
         name
       }      
     }

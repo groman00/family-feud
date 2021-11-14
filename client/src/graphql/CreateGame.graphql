@@ -3,6 +3,7 @@
       game {
         token
         players {
+          id
           name
         }
       }

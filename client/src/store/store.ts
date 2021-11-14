@@ -1,5 +1,5 @@
 import React from 'react';
-import { Survey, Game } from '../graphql/generated/types';
+import { Game } from '../graphql/generated/types';
 
 export interface State {
   currentGame: Game | undefined
@@ -43,11 +43,12 @@ export function reducer(state: State, action: Action): State {
     //     currentGame: {}
     //   };  
     case ActionTypes.SetCurrentGame:
+      console.log('case ActionTypes.SetCurrentGame:', action.payload)
       return {
         currentGame: {
           players: [], // Todo: Fix this
-          ...action.payload,
           ...state.currentGame,
+          ...action.payload,          
         }
       };            
     default:

@@ -13,8 +13,10 @@ function App() {
     variables: {},
   });  
   
-  console.log('GAME CREATED', loading, data, error);
+  console.log('GAME CREATED: loading:', loading, 'data:', data, 'error:', error);
 
+  console.log(state.currentGame);
+  
   const toComponent = () => {
     if (state.currentGame) {
       return <Game />;

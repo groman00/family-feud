@@ -50,7 +50,6 @@ module.exports = (models, pubsub) => ({
 
       return {
         game
-        // players
       }
     },
     joinGame: async (_, { token, playerName }) => {
@@ -63,8 +62,10 @@ module.exports = (models, pubsub) => ({
         name: playerName,
       });    
       await player.setGame(game);
-      await player.save();               
+      await player.save();   
+        
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
+      
       return { game };
     }
   },

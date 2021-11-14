@@ -2,6 +2,7 @@ subscription OnGameCreated {
   gameCreated {
     token
     players {
+      id
       name
     }    
   }

@@ -95,7 +95,7 @@ export type CreateGameMutation = (
       & Pick<Game, 'token'>
       & { players: Array<(
         { __typename?: 'Player' }
-        & Pick<Player, 'name'>
+        & Pick<Player, 'id' | 'name'>
       )> }
     ) }
   )> }
@@ -116,7 +116,7 @@ export type JoinGameMutation = (
       & Pick<Game, 'token'>
       & { players: Array<(
         { __typename?: 'Player' }
-        & Pick<Player, 'name'>
+        & Pick<Player, 'id' | 'name'>
       )> }
     )> }
   )> }
@@ -132,7 +132,7 @@ export type OnGameCreatedSubscription = (
     & Pick<Game, 'token'>
     & { players: Array<(
       { __typename?: 'Player' }
-      & Pick<Player, 'name'>
+      & Pick<Player, 'id' | 'name'>
     )> }
   )> }
 );
@@ -147,7 +147,7 @@ export type OnPlayerJoinedSubscription = (
     & Pick<Game, 'token'>
     & { players: Array<(
       { __typename?: 'Player' }
-      & Pick<Player, 'name'>
+      & Pick<Player, 'id' | 'name'>
     )> }
   )> }
 );
@@ -174,6 +174,7 @@ export const CreateGameDocument = gql`
     game {
       token
       players {
+        id
         name
       }
     }
@@ -211,6 +212,7 @@ export const JoinGameDocument = gql`
     game {
       token
       players {
+        id
         name
       }
     }
@@ -249,6 +251,7 @@ export const OnGameCreatedDocument = gql`
   gameCreated {
     token
     players {
+      id
       name
     }
   }
@@ -281,6 +284,7 @@ export const OnPlayerJoinedDocument = gql`
   playerJoined {
     token
     players {
+      id
       name
     }
   }

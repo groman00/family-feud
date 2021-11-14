@@ -1,22 +1,16 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../contexts';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useOnPlayerJoinedSubscription } from '../../graphql/generated/types';
-// import { useOnGameCreatedSubscription } from '../../graphql/generated/types';
+import { useCurrentGame, usePlayerJoined } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
 
 import './Game.css';
 
 export const Game: React.FC = () => {
-  const { state: { currentGame } } = useContext(AppContext);
+  const currentGame = useCurrentGame();
+  
+  usePlayerJoined();
 
-  const { data, loading, error } = useOnPlayerJoinedSubscription({
-    variables: {},
-  });
-  
-  console.log('PLAYER JOINED!', data, loading, error)
-  
   if (currentGame?.token) {
     return (
       <div className="game">
@@ -27,7 +21,7 @@ export const Game: React.FC = () => {
           <div>
             <h2>Players:</h2>
             <ul>
-              { currentGame.players.map(player => <li>{player.name}</li>)}
+              { currentGame.players.map(player => <li key={player.name}>{player.name}</li>)}
             </ul>
           </div>
         </GameProvider>
