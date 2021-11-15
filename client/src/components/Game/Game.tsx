@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useCurrentGame, usePlayerJoined } from '../../hooks';
+import { useState, usePlayerJoined } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
 
 import './Game.css';
 
 export const Game: React.FC = () => {
-  const currentGame = useCurrentGame();
+  const { currentGame, playerName } = useState();
   
   usePlayerJoined();
 
@@ -16,12 +16,11 @@ export const Game: React.FC = () => {
       <div className="game">
         <GameProvider>
           <Status />
-          <Player />
-          <Host />
+          { playerName ? <Player /> : <Host />}
           <div>
             <h2>Players:</h2>
             <ul>
-              { currentGame.players.map(player => <li key={player.name}>{player.name}</li>)}
+              { currentGame.players?.map(player => <li key={player.name}>{player.name}</li>)}
             </ul>
           </div>
         </GameProvider>

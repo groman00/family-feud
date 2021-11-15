@@ -22,8 +22,11 @@ export const Menu: React.FC = () => {
     console.log('join game data: ', data, error);
     if (data?.joinGame?.game) {
       dispatch({
-        type: ActionTypes.SetCurrentGame,
-        payload: data.joinGame.game as Game
+        type: ActionTypes.JoinExistingGame,
+        payload: {
+          game: data.joinGame.game as Game,
+          playerName
+        }
       });
     }
   }, [data, error]);
@@ -45,7 +48,7 @@ export const Menu: React.FC = () => {
           <input 
             placeholder="Enter Game Code"
             value={token}
-            onChange={(e) => setToken(e.target.value)}
+            onChange={e => setToken(e.target.value)}
           />
         </label>
         <label>

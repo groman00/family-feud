@@ -13,9 +13,9 @@ export const useCreateGame = () => {
     console.log('useCreateGame > useEffect', data);
     if (data?.createGame) {
       dispatch({
-          type: ActionTypes.SetCurrentGame,
-          payload: data.createGame?.game as Game
-        });
+        type: ActionTypes.SetCurrentGame,
+        payload: data.createGame?.game
+      });
     }
   }, [data, dispatch]);
 

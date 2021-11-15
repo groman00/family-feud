@@ -15,10 +15,10 @@ function App() {
   
   console.log('GAME CREATED: loading:', loading, 'data:', data, 'error:', error);
 
-  console.log(state.currentGame);
+  console.log('CURRENT STATE:', state);
   
   const toComponent = () => {
-    if (state.currentGame) {
+    if (state.currentGame.token) {
       return <Game />;
     }
     return <Menu />

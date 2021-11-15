@@ -1,8 +1,9 @@
 import React from 'react';
-import { Game } from '../graphql/generated/types';
+import { Game, Player } from '../graphql/generated/types';
 
 export interface State {
-  currentGame: Game | undefined
+  currentGame: Partial<Game>
+  playerName?: Player['name']
 }
 
 export enum ActionTypes {
@@ -16,37 +17,35 @@ export type Action =
   | { 
       type: ActionTypes.JoinExistingGame,
       payload: {
-        token: Game["token"]
+        game: Game,
+        playerName: Player['name'],
       }
     } 
   | { 
       type: ActionTypes.SetCurrentGame,
       payload: Partial<Game>
-    };
+    }
 
 export const initialState: State = {
-  currentGame: undefined
-  // currentGame: { token: 'test' }
+  currentGame: {},
 };
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionTypes.JoinExistingGame:
       return {
+        ...state,
         currentGame: {
-          token: action.payload.token,
-          players: [] // Todo: Fix this
-        }
+          ...state.currentGame,
+          ...action.payload.game,
+        },
+        playerName: action.payload.playerName,
       };
-    // case ActionTypes.PlayNewGame:
-    //   return {
-    //     currentGame: {}
-    //   };  
     case ActionTypes.SetCurrentGame:
       console.log('case ActionTypes.SetCurrentGame:', action.payload)
       return {
+        ...state,
         currentGame: {
-          players: [], // Todo: Fix this
           ...state.currentGame,
           ...action.payload,          
         }

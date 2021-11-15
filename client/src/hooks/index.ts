@@ -1,3 +1,3 @@
 export * from './useCreateGame';
-export * from './useCurrentGame';
+export * from './useState';
 export * from './usePlayerJoined';

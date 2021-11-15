@@ -2,18 +2,18 @@ import { useContext, useEffect, useMemo } from 'react';
 import { useOnPlayerJoinedSubscription } from '../graphql/generated/types';
 import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
-import { useCurrentGame } from '.';
+import { useState } from './useState';
 
 export const usePlayerJoined = () => {
   const { dispatch } = useContext(AppContext);
-  const currentGame = useCurrentGame();
+  const { currentGame } = useState();
   const { data, loading, error } = useOnPlayerJoinedSubscription({
     variables: {},
   });
   const hasMore = useMemo(() => {
     // TODO: If SetCurrentGame didn't cause Game to re-render,
     // This checkout wouldn't be necessary.
-    if (!data?.playerJoined?.players || !currentGame?.players.length) {
+    if (!data?.playerJoined?.players || !currentGame?.players?.length) {
       return false;
     }
     return data.playerJoined.players.length > currentGame.players.length
