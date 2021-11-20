@@ -23,7 +23,14 @@ module.exports = (models, pubsub) => ({
           gameId: parent.id
         }
       });
-    },      
+    },   
+    survey: async (parent) => {
+      return models.Survey.findOne({
+        where: {
+          gameId: parent.id
+        }
+      });
+    },  
   },
 
   Mutation:  {
@@ -38,7 +45,16 @@ module.exports = (models, pubsub) => ({
         name: 'host',
       });    
       await player.setGame(game);
-      await player.save();         
+      await player.save();  
+      
+      await models.Survey.update(
+        { gameId: game.id},
+        {
+          where: {
+            id: 1
+          }
+        }
+      );
 
       // Testing: Clear all games
       // models.Game.destroy({
@@ -67,7 +83,10 @@ module.exports = (models, pubsub) => ({
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       
       return { game };
-    }
+    },
+    // submitAnswer: async (_, { answerId, gameId }) => {
+
+    // }
   },
   Subscription: {
     gameCreated: {

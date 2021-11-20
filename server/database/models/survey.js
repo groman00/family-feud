@@ -13,12 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Survey.hasMany(models.Answer, {
         foreignKey: 'surveyId',
-      });      
+      });  
+      Survey.belongsTo(models.Game);          
     }
   };
   Survey.init({
     title: DataTypes.STRING,
-    totalAnswers: DataTypes.INTEGER
+    totalAnswers: DataTypes.INTEGER,
+    gameId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Survey',

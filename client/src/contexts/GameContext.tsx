@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import { AppContext } from "./AppContext";
-import { Answer, Game, useSurveysQuery } from "../graphql/generated/types";
+import { Answer, Game } from "../graphql/generated/types";
 
 export enum GameStatus {
   InProgress = 'inProgress',
@@ -30,9 +30,7 @@ export const GameProvider: React.FC = ({ children }) => {
   const { state: { currentGame } } = useContext(AppContext);
   const [strikes, setStrikes] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState<AnswerIds>([]);
-  const { data } = useSurveysQuery();
-
-  const survey = data?.surveys[0];
+  const survey = currentGame.survey;
 
   const status: GameStatus = useMemo(() => {
     if (!survey) {

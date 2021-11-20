@@ -14,6 +14,7 @@ const typeDefs = gql`
     title: String
     totalAnswers: Int
     answers: [Answer!]!
+    gameId: Int
   }
 
   type Player {
@@ -24,6 +25,7 @@ const typeDefs = gql`
   type Game {
     token: String
     players: [Player!]!
+    survey: Survey
   }
 
   type GameCreatedResponse {
@@ -43,6 +45,7 @@ const typeDefs = gql`
   type Mutation {
     createGame: GameCreatedResponse
     joinGame(token: String!, playerName: String!): GameJoinedResponse
+    # submitAnswer(id)
   }
   
   type Subscription {

@@ -27,6 +27,7 @@ export type Game = {
   __typename?: 'Game';
   token?: Maybe<Scalars['String']>;
   players: Array<Player>;
+  survey?: Maybe<Survey>;
 };
 
 export type GameCreatedResponse = {
@@ -93,7 +94,14 @@ export type CreateGameMutation = (
     & { game: (
       { __typename?: 'Game' }
       & Pick<Game, 'token'>
-      & { players: Array<(
+      & { survey?: Maybe<(
+        { __typename?: 'Survey' }
+        & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
+        & { answers: Array<(
+          { __typename?: 'Answer' }
+          & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
+        )> }
+      )>, players: Array<(
         { __typename?: 'Player' }
         & Pick<Player, 'id' | 'name'>
       )> }
@@ -172,6 +180,18 @@ export const CreateGameDocument = gql`
     mutation CreateGame {
   createGame {
     game {
+      survey {
+        id
+        title
+        totalAnswers
+        answers {
+          id
+          surveyId
+          text
+          count
+          rank
+        }
+      }
       token
       players {
         id
