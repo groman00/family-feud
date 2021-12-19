@@ -2,11 +2,11 @@ import { useContext, useEffect, useMemo } from 'react';
 import { useOnPlayerJoinedSubscription } from '../graphql/generated/types';
 import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
-import { useState } from './useState';
+import { useStoreState } from './useStore';
 
 export const usePlayerJoined = () => {
   const { dispatch } = useContext(AppContext);
-  const { currentGame } = useState();
+  const { currentGame } = useStoreState();
   const { data, loading, error } = useOnPlayerJoinedSubscription({
     variables: {},
   });

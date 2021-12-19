@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useState, usePlayerJoined } from '../../hooks';
+import { usePlayerJoined, useStoreState } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
 
 import './Game.css';
 
 export const Game: React.FC = () => {
-  const { currentGame, playerName } = useState();
+  const { currentGame, playerName } = useStoreState();
   
   usePlayerJoined();
 

@@ -1,10 +1,10 @@
-import { useContext, useEffect } from 'react';
-import { Game, useCreateGameMutation } from '../graphql/generated/types';
-import { AppContext } from '../contexts';
+import { useEffect } from 'react';
+import { useCreateGameMutation } from '../graphql/generated/types';
 import { ActionTypes } from '../store';
+import { useDispatch } from './useStore';
 
 export const useCreateGame = () => {
-  const { dispatch } = useContext(AppContext);
+  const dispatch = useDispatch();
   const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
     variables: {},
   });
