@@ -8,7 +8,7 @@
 ___
 ### Sequelize: https://sequelize.org
 ```
-npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+npm run model:generate --  --name User --attributes firstName:string,lastName:string,email:string
 
 npx sequelize-cli db:migrate
 

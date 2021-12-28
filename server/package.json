@@ -6,9 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js",
-    "migrate": "cd ./database && npx sequelize-cli db:migrate",
-    "seed": "cd ./database && npx sequelize-cli db:seed:all",
-    "migration:generate": "cd ./database && npx sequelize-cli migration:generate --name migration-skeleton"
+    "migrate": "cd ./database && sequelize-cli db:migrate",
+    "migrate:undo": "cd ./database && sequelize-cli db:migrate:undo",
+    "seed": "cd ./database && sequelize-cli db:seed:all",
+    "seed:undo": "cd ./database && sequelize-cli db:seed:undo --seed",
+    "migration:generate": "cd ./database && sequelize-cli migration:generate --name migration-skeleton",
+    "model:generate": "cd ./database && sequelize-cli model:generate"
   },
   "author": "",
   "license": "ISC",
@@ -25,5 +28,7 @@
     "sqlite3": "^5.0.1",
     "subscriptions-transport-ws": "^0.9.19"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0"
+  }
 }

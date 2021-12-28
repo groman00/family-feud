@@ -21,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     text: DataTypes.STRING,
     count: DataTypes.INTEGER,
     rank: DataTypes.INTEGER,
-    surveyId: DataTypes.INTEGER
+    surveyId: DataTypes.INTEGER,
+    revealed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Answer',

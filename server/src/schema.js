@@ -7,6 +7,7 @@ const typeDefs = gql`
     count: Int!
     text: String!
     rank: Int!
+    revealed: Boolean!
   }
 
   type Survey {
@@ -50,7 +51,8 @@ const typeDefs = gql`
   
   type Subscription {
     gameCreated: Game
-    playerJoined: Game
+    playerJoined: Game,
+    answerRevealed: Game,
   }
 `;
 

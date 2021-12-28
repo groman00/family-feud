@@ -8,26 +8,26 @@ module.exports = (models, pubsub) => ({
     },    
   },
   Survey: {
-    answers: async (parent) => {
+    answers: async (survey) => {
       return models.Answer.findAll({
         where: {
-          surveyId: parent.id
+          surveyId: survey.id
         }
       });
     },  
   },
   Game: {
-    players: async (parent) => {
+    players: async (game) => {
       return models.Player.findAll({
         where: {
-          gameId: parent.id
+          gameId: game.id
         }
       });
     },   
-    survey: async (parent) => {
+    survey: async (game) => {
       return models.Survey.findOne({
         where: {
-          gameId: parent.id
+          gameId: game.id
         }
       });
     },  
@@ -84,6 +84,22 @@ module.exports = (models, pubsub) => ({
       
       return { game };
     },
+    // revealAnswer: async (_, { token, playerName, answerId }) => {
+      // const game = await models.Game.findOne({
+      //   where: {
+      //     token
+      //   }
+      // });
+      // const player = models.Player.build({
+      //   name: playerName,
+      // });    
+      // await player.setGame(game);
+      // await player.save();   
+        
+      // pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
+      
+      // return { game };
+    // },    
     // submitAnswer: async (_, { answerId, gameId }) => {
 
     // }
@@ -94,6 +110,9 @@ module.exports = (models, pubsub) => ({
     },
     playerJoined: {
       subscribe: () => pubsub.asyncIterator(['PLAYER_JOINED']),
-    },    
+    },   
+    answerRevealed: {
+      subscribe: () => pubsub.asyncIterator(['ANSWER_REVEALED']),
+    },        
   },  
 });
