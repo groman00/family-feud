@@ -1,4 +1,4 @@
-fragment gameFields on Game {
+fragment GameFields on Game {
   survey {
     id
     title
@@ -9,6 +9,7 @@ fragment gameFields on Game {
       text
       count
       rank
+      revealed
     }
   }
   token

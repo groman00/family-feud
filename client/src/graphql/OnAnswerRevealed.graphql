@@ -1,9 +1,5 @@
 subscription OnAnswerRevealed {
   answerRevealed {
-    survey {
-      answers {
-        revealed
-      }
-    }
+    ...GameFields
   }
 }

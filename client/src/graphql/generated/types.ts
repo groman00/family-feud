@@ -91,18 +91,7 @@ export type CreateGameMutation = (
   { __typename?: 'Mutation' }
   & { createGame?: Maybe<(
     { __typename?: 'Game' }
-    & Pick<Game, 'token'>
-    & { survey?: Maybe<(
-      { __typename?: 'Survey' }
-      & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
-      & { answers: Array<(
-        { __typename?: 'Answer' }
-        & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
-      )> }
-    )>, players: Array<(
-      { __typename?: 'Player' }
-      & Pick<Player, 'id' | 'name'>
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -116,11 +105,7 @@ export type JoinGameMutation = (
   { __typename?: 'Mutation' }
   & { joinGame?: Maybe<(
     { __typename?: 'Game' }
-    & Pick<Game, 'token'>
-    & { players: Array<(
-      { __typename?: 'Player' }
-      & Pick<Player, 'id' | 'name'>
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -131,13 +116,7 @@ export type OnAnswerRevealedSubscription = (
   { __typename?: 'Subscription' }
   & { answerRevealed?: Maybe<(
     { __typename?: 'Game' }
-    & { survey?: Maybe<(
-      { __typename?: 'Survey' }
-      & { answers: Array<(
-        { __typename?: 'Answer' }
-        & Pick<Answer, 'revealed'>
-      )> }
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -148,11 +127,7 @@ export type OnGameCreatedSubscription = (
   { __typename?: 'Subscription' }
   & { gameCreated?: Maybe<(
     { __typename?: 'Game' }
-    & Pick<Game, 'token'>
-    & { players: Array<(
-      { __typename?: 'Player' }
-      & Pick<Player, 'id' | 'name'>
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -163,11 +138,7 @@ export type OnPlayerJoinedSubscription = (
   { __typename?: 'Subscription' }
   & { playerJoined?: Maybe<(
     { __typename?: 'Game' }
-    & Pick<Game, 'token'>
-    & { players: Array<(
-      { __typename?: 'Player' }
-      & Pick<Player, 'id' | 'name'>
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -181,13 +152,7 @@ export type RevealAnswerMutation = (
   { __typename?: 'Mutation' }
   & { revealAnswer?: Maybe<(
     { __typename?: 'Game' }
-    & { survey?: Maybe<(
-      { __typename?: 'Survey' }
-      & { answers: Array<(
-        { __typename?: 'Answer' }
-        & Pick<Answer, 'revealed'>
-      )> }
-    )> }
+    & GameFieldsFragment
   )> }
 );
 
@@ -214,7 +179,7 @@ export type GameFieldsFragment = (
     & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
     & { answers: Array<(
       { __typename?: 'Answer' }
-      & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
+      & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank' | 'revealed'>
     )> }
   )>, players: Array<(
     { __typename?: 'Player' }
@@ -223,7 +188,7 @@ export type GameFieldsFragment = (
 );
 
 export const GameFieldsFragmentDoc = gql`
-    fragment gameFields on Game {
+    fragment GameFields on Game {
   survey {
     id
     title
@@ -234,6 +199,7 @@ export const GameFieldsFragmentDoc = gql`
       text
       count
       rank
+      revealed
     }
   }
   token
@@ -246,26 +212,10 @@ export const GameFieldsFragmentDoc = gql`
 export const CreateGameDocument = gql`
     mutation CreateGame {
   createGame {
-    survey {
-      id
-      title
-      totalAnswers
-      answers {
-        id
-        surveyId
-        text
-        count
-        rank
-      }
-    }
-    token
-    players {
-      id
-      name
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 export type CreateGameMutationFn = Apollo.MutationFunction<CreateGameMutation, CreateGameMutationVariables>;
 
 /**
@@ -294,14 +244,10 @@ export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMut
 export const JoinGameDocument = gql`
     mutation JoinGame($token: String!, $playerName: String!) {
   joinGame(token: $token, playerName: $playerName) {
-    token
-    players {
-      id
-      name
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 export type JoinGameMutationFn = Apollo.MutationFunction<JoinGameMutation, JoinGameMutationVariables>;
 
 /**
@@ -332,14 +278,10 @@ export type JoinGameMutationOptions = Apollo.BaseMutationOptions<JoinGameMutatio
 export const OnAnswerRevealedDocument = gql`
     subscription OnAnswerRevealed {
   answerRevealed {
-    survey {
-      answers {
-        revealed
-      }
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 
 /**
  * __useOnAnswerRevealedSubscription__
@@ -365,14 +307,10 @@ export type OnAnswerRevealedSubscriptionResult = Apollo.SubscriptionResult<OnAns
 export const OnGameCreatedDocument = gql`
     subscription OnGameCreated {
   gameCreated {
-    token
-    players {
-      id
-      name
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 
 /**
  * __useOnGameCreatedSubscription__
@@ -398,14 +336,10 @@ export type OnGameCreatedSubscriptionResult = Apollo.SubscriptionResult<OnGameCr
 export const OnPlayerJoinedDocument = gql`
     subscription OnPlayerJoined {
   playerJoined {
-    token
-    players {
-      id
-      name
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 
 /**
  * __useOnPlayerJoinedSubscription__
@@ -431,14 +365,10 @@ export type OnPlayerJoinedSubscriptionResult = Apollo.SubscriptionResult<OnPlaye
 export const RevealAnswerDocument = gql`
     mutation RevealAnswer($answerId: String!, $token: String!) {
   revealAnswer(answerId: $answerId, token: $token) {
-    survey {
-      answers {
-        revealed
-      }
-    }
+    ...GameFields
   }
 }
-    `;
+    ${GameFieldsFragmentDoc}`;
 export type RevealAnswerMutationFn = Apollo.MutationFunction<RevealAnswerMutation, RevealAnswerMutationVariables>;
 
 /**

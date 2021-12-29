@@ -1,9 +1,5 @@
 subscription OnPlayerJoined {
   playerJoined {
-    token
-    players {
-      id
-      name
-    }    
+    ...GameFields   
   }
 }
