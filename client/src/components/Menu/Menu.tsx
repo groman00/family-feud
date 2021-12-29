@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { AppContext } from '../../contexts';
-import { Game, useJoinGameMutation } from '../../graphql/generated/types';
-import { useCreateGame } from '../../hooks';
+import { Game, useCreateGameMutation, useJoinGameMutation } from '../../graphql/generated/types';
+import { useDispatch } from '../../hooks';
 import { ActionTypes } from '../../store';
 import './Menu.css';
 
 export const Menu: React.FC = () => {
-  const { dispatch } = useContext(AppContext)
-  const createGameMutation = useCreateGame();
+  const dispatch = useDispatch();
+  const [createGameMutation, { data: createGameData }] = useCreateGameMutation({
+    variables: {},
+  });
   const [token, setToken] = useState<string>('');
   const [playerName, setPlayerName] = useState<string>('');
   const canJoinGame = useMemo(() => Boolean(token && playerName), [token, playerName])
@@ -29,7 +31,17 @@ export const Menu: React.FC = () => {
         }
       });
     }
-  }, [data, error]);
+  }, [data, error, dispatch, playerName]);
+
+  useEffect(() => {
+    console.log('useCreateGame > useEffect', createGameData);
+    if (createGameData?.createGame) {
+      dispatch({
+        type: ActionTypes.SetCurrentGame,
+        payload: createGameData.createGame as Game
+      });
+    }
+  }, [createGameData, dispatch]);  
 
   return (
     <div className="menu">

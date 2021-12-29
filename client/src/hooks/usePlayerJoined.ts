@@ -12,7 +12,7 @@ export const usePlayerJoined = () => {
   });
   const hasMore = useMemo(() => {
     // TODO: If SetCurrentGame didn't cause Game to re-render,
-    // This checkout wouldn't be necessary.
+    // This check wouldn't be necessary.
     if (!data?.playerJoined?.players || !currentGame?.players?.length) {
       return false;
     }
