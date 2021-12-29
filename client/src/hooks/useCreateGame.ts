@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useCreateGameMutation } from '../graphql/generated/types';
+import { Game, useCreateGameMutation } from '../graphql/generated/types';
 import { ActionTypes } from '../store';
 import { useDispatch } from './useStore';
 
@@ -14,7 +14,7 @@ export const useCreateGame = () => {
     if (data?.createGame) {
       dispatch({
         type: ActionTypes.SetCurrentGame,
-        payload: data.createGame?.game
+        payload: data.createGame as Game
       });
     }
   }, [data, dispatch]);

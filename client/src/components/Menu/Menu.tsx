@@ -20,11 +20,11 @@ export const Menu: React.FC = () => {
 
   useEffect(() => {
     console.log('join game data: ', data, error);
-    if (data?.joinGame?.game) {
+    if (data?.joinGame) {
       dispatch({
         type: ActionTypes.JoinExistingGame,
         payload: {
-          game: data.joinGame.game as Game,
+          game: data.joinGame,
           playerName
         }
       });

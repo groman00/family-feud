@@ -1,0 +1,19 @@
+fragment gameFields on Game {
+  survey {
+    id
+    title
+    totalAnswers
+    answers {
+      id
+      surveyId
+      text
+      count
+      rank
+    }
+  }
+  token
+  players {
+    id
+    name
+  }
+}

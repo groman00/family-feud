@@ -1,0 +1,9 @@
+mutation RevealAnswer($answerId: String!, $token: String!) {
+  revealAnswer(answerId: $answerId, token: $token) {
+    survey {
+      answers {
+        revealed
+      }
+    }
+  }
+}

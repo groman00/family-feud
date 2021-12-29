@@ -21,6 +21,7 @@ export type Answer = {
   count: Scalars['Int'];
   text: Scalars['String'];
   rank: Scalars['Int'];
+  revealed: Scalars['Boolean'];
 };
 
 export type Game = {
@@ -30,26 +31,23 @@ export type Game = {
   survey?: Maybe<Survey>;
 };
 
-export type GameCreatedResponse = {
-  __typename?: 'GameCreatedResponse';
-  game: Game;
-};
-
-export type GameJoinedResponse = {
-  __typename?: 'GameJoinedResponse';
-  game?: Maybe<Game>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  createGame?: Maybe<GameCreatedResponse>;
-  joinGame?: Maybe<GameJoinedResponse>;
+  createGame?: Maybe<Game>;
+  joinGame?: Maybe<Game>;
+  revealAnswer?: Maybe<Game>;
 };
 
 
 export type MutationJoinGameArgs = {
   token: Scalars['String'];
   playerName: Scalars['String'];
+};
+
+
+export type MutationRevealAnswerArgs = {
+  answerId: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type Player = {
@@ -74,6 +72,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   gameCreated?: Maybe<Game>;
   playerJoined?: Maybe<Game>;
+  answerRevealed?: Maybe<Game>;
 };
 
 export type Survey = {
@@ -82,6 +81,7 @@ export type Survey = {
   title?: Maybe<Scalars['String']>;
   totalAnswers?: Maybe<Scalars['Int']>;
   answers: Array<Answer>;
+  gameId?: Maybe<Scalars['Int']>;
 };
 
 export type CreateGameMutationVariables = Exact<{ [key: string]: never; }>;
@@ -90,22 +90,19 @@ export type CreateGameMutationVariables = Exact<{ [key: string]: never; }>;
 export type CreateGameMutation = (
   { __typename?: 'Mutation' }
   & { createGame?: Maybe<(
-    { __typename?: 'GameCreatedResponse' }
-    & { game: (
-      { __typename?: 'Game' }
-      & Pick<Game, 'token'>
-      & { survey?: Maybe<(
-        { __typename?: 'Survey' }
-        & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
-        & { answers: Array<(
-          { __typename?: 'Answer' }
-          & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
-        )> }
-      )>, players: Array<(
-        { __typename?: 'Player' }
-        & Pick<Player, 'id' | 'name'>
+    { __typename?: 'Game' }
+    & Pick<Game, 'token'>
+    & { survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
+      & { answers: Array<(
+        { __typename?: 'Answer' }
+        & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
       )> }
-    ) }
+    )>, players: Array<(
+      { __typename?: 'Player' }
+      & Pick<Player, 'id' | 'name'>
+    )> }
   )> }
 );
 
@@ -118,13 +115,27 @@ export type JoinGameMutationVariables = Exact<{
 export type JoinGameMutation = (
   { __typename?: 'Mutation' }
   & { joinGame?: Maybe<(
-    { __typename?: 'GameJoinedResponse' }
-    & { game?: Maybe<(
-      { __typename?: 'Game' }
-      & Pick<Game, 'token'>
-      & { players: Array<(
-        { __typename?: 'Player' }
-        & Pick<Player, 'id' | 'name'>
+    { __typename?: 'Game' }
+    & Pick<Game, 'token'>
+    & { players: Array<(
+      { __typename?: 'Player' }
+      & Pick<Player, 'id' | 'name'>
+    )> }
+  )> }
+);
+
+export type OnAnswerRevealedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnAnswerRevealedSubscription = (
+  { __typename?: 'Subscription' }
+  & { answerRevealed?: Maybe<(
+    { __typename?: 'Game' }
+    & { survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & { answers: Array<(
+        { __typename?: 'Answer' }
+        & Pick<Answer, 'revealed'>
       )> }
     )> }
   )> }
@@ -160,6 +171,26 @@ export type OnPlayerJoinedSubscription = (
   )> }
 );
 
+export type RevealAnswerMutationVariables = Exact<{
+  answerId: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+
+export type RevealAnswerMutation = (
+  { __typename?: 'Mutation' }
+  & { revealAnswer?: Maybe<(
+    { __typename?: 'Game' }
+    & { survey?: Maybe<(
+      { __typename?: 'Survey' }
+      & { answers: Array<(
+        { __typename?: 'Answer' }
+        & Pick<Answer, 'revealed'>
+      )> }
+    )> }
+  )> }
+);
+
 export type SurveysQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -175,28 +206,62 @@ export type SurveysQuery = (
   )> }
 );
 
+export type GameFieldsFragment = (
+  { __typename?: 'Game' }
+  & Pick<Game, 'token'>
+  & { survey?: Maybe<(
+    { __typename?: 'Survey' }
+    & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
+    & { answers: Array<(
+      { __typename?: 'Answer' }
+      & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank'>
+    )> }
+  )>, players: Array<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id' | 'name'>
+  )> }
+);
 
+export const GameFieldsFragmentDoc = gql`
+    fragment gameFields on Game {
+  survey {
+    id
+    title
+    totalAnswers
+    answers {
+      id
+      surveyId
+      text
+      count
+      rank
+    }
+  }
+  token
+  players {
+    id
+    name
+  }
+}
+    `;
 export const CreateGameDocument = gql`
     mutation CreateGame {
   createGame {
-    game {
-      survey {
+    survey {
+      id
+      title
+      totalAnswers
+      answers {
         id
-        title
-        totalAnswers
-        answers {
-          id
-          surveyId
-          text
-          count
-          rank
-        }
+        surveyId
+        text
+        count
+        rank
       }
-      token
-      players {
-        id
-        name
-      }
+    }
+    token
+    players {
+      id
+      name
     }
   }
 }
@@ -229,12 +294,10 @@ export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMut
 export const JoinGameDocument = gql`
     mutation JoinGame($token: String!, $playerName: String!) {
   joinGame(token: $token, playerName: $playerName) {
-    game {
-      token
-      players {
-        id
-        name
-      }
+    token
+    players {
+      id
+      name
     }
   }
 }
@@ -266,6 +329,39 @@ export function useJoinGameMutation(baseOptions?: Apollo.MutationHookOptions<Joi
 export type JoinGameMutationHookResult = ReturnType<typeof useJoinGameMutation>;
 export type JoinGameMutationResult = Apollo.MutationResult<JoinGameMutation>;
 export type JoinGameMutationOptions = Apollo.BaseMutationOptions<JoinGameMutation, JoinGameMutationVariables>;
+export const OnAnswerRevealedDocument = gql`
+    subscription OnAnswerRevealed {
+  answerRevealed {
+    survey {
+      answers {
+        revealed
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnAnswerRevealedSubscription__
+ *
+ * To run a query within a React component, call `useOnAnswerRevealedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnAnswerRevealedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnAnswerRevealedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnAnswerRevealedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnAnswerRevealedSubscription, OnAnswerRevealedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnAnswerRevealedSubscription, OnAnswerRevealedSubscriptionVariables>(OnAnswerRevealedDocument, options);
+      }
+export type OnAnswerRevealedSubscriptionHookResult = ReturnType<typeof useOnAnswerRevealedSubscription>;
+export type OnAnswerRevealedSubscriptionResult = Apollo.SubscriptionResult<OnAnswerRevealedSubscription>;
 export const OnGameCreatedDocument = gql`
     subscription OnGameCreated {
   gameCreated {
@@ -332,6 +428,44 @@ export function useOnPlayerJoinedSubscription(baseOptions?: Apollo.SubscriptionH
       }
 export type OnPlayerJoinedSubscriptionHookResult = ReturnType<typeof useOnPlayerJoinedSubscription>;
 export type OnPlayerJoinedSubscriptionResult = Apollo.SubscriptionResult<OnPlayerJoinedSubscription>;
+export const RevealAnswerDocument = gql`
+    mutation RevealAnswer($answerId: String!, $token: String!) {
+  revealAnswer(answerId: $answerId, token: $token) {
+    survey {
+      answers {
+        revealed
+      }
+    }
+  }
+}
+    `;
+export type RevealAnswerMutationFn = Apollo.MutationFunction<RevealAnswerMutation, RevealAnswerMutationVariables>;
+
+/**
+ * __useRevealAnswerMutation__
+ *
+ * To run a mutation, you first call `useRevealAnswerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevealAnswerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revealAnswerMutation, { data, loading, error }] = useRevealAnswerMutation({
+ *   variables: {
+ *      answerId: // value for 'answerId'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useRevealAnswerMutation(baseOptions?: Apollo.MutationHookOptions<RevealAnswerMutation, RevealAnswerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RevealAnswerMutation, RevealAnswerMutationVariables>(RevealAnswerDocument, options);
+      }
+export type RevealAnswerMutationHookResult = ReturnType<typeof useRevealAnswerMutation>;
+export type RevealAnswerMutationResult = Apollo.MutationResult<RevealAnswerMutation>;
+export type RevealAnswerMutationOptions = Apollo.BaseMutationOptions<RevealAnswerMutation, RevealAnswerMutationVariables>;
 export const SurveysDocument = gql`
     query Surveys {
   surveys {

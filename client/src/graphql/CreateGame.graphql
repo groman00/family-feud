@@ -1,23 +1,21 @@
   mutation CreateGame {
     createGame {
-      game {
-        survey {
+      survey {
+        id
+        title
+        totalAnswers
+        answers {
           id
-          title
-          totalAnswers
-          answers {
-            id
-            surveyId
-            text
-            count
-            rank
-          }
+          surveyId
+          text
+          count
+          rank
         }
-        token
-        players {
-          id
-          name
-        }
+      }
+      token
+      players {
+        id
+        name
       }
     }
   }

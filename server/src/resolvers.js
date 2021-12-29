@@ -64,9 +64,7 @@ module.exports = (models, pubsub) => ({
 
       pubsub.publish('GAME_CREATED', { gameCreated: game });
 
-      return {
-        game
-      }
+      return game;
     },
     joinGame: async (_, { token, playerName }) => {
       const game = await models.Game.findOne({
@@ -82,27 +80,27 @@ module.exports = (models, pubsub) => ({
         
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       
-      return { game };
+      return game;
     },
-    // revealAnswer: async (_, { token, playerName, answerId }) => {
-      // const game = await models.Game.findOne({
-      //   where: {
-      //     token
-      //   }
-      // });
-      // const player = models.Player.build({
-      //   name: playerName,
-      // });    
-      // await player.setGame(game);
-      // await player.save();   
-        
-      // pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
+    revealAnswer: async (_, { answerId, token }) => {  
+      await models.Answer.update({
+        revealed: true
+      }, {
+        where: {
+          id: answerId
+        }
+      });
       
-      // return { game };
-    // },    
-    // submitAnswer: async (_, { answerId, gameId }) => {
+      const game = await models.Game.findOne({
+        where: {
+          token
+        }
+      });      
 
-    // }
+      pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
+      
+      return game;
+    },    
   },
   Subscription: {
     gameCreated: {

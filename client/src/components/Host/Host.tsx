@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
+import { useRevealAnswerMutation } from "../../graphql/generated/types";
 import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
@@ -10,17 +11,33 @@ export const Host: React.FC = () => {
     setStrikes,
     token
   } = useContext(GameContext);  
+  const [revealAnswer, 
+    //{ data, loading, error }
+  ] = useRevealAnswerMutation();    
+  
+  if (!token) {
+    return null;
+  }
+  
   return (
     <div>
       <h1>Host</h1>
       <h2>Game Token: {token}</h2>
       <Answers>
-        {answer => (
+        {({ id, text}) => (
           <button 
-            disabled={hasEnded || correctAnswers.includes(answer.id)}
-            onClick={(e) => setCorrectAnswers(answers => [...answers, answer.id])}
+            disabled={hasEnded || correctAnswers.includes(id)}
+            onClick={(e) => {
+              setCorrectAnswers(answers => [...answers, id]);
+              revealAnswer({
+                variables: {
+                  token,
+                  answerId: id
+                }
+              });
+            }}
           >
-            {answer.text}
+            {text}
           </button>
         )}
       </Answers>
