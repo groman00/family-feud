@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useOnAnswerRevealedSubscription } from '../../graphql/generated/types';
-import { usePlayerJoined, useStoreState } from '../../hooks';
+import { useAnswerRevealed, usePlayerJoined, useStoreState } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
 
@@ -11,14 +10,7 @@ export const Game: React.FC = () => {
   const { currentGame, playerName } = useStoreState();
   
   usePlayerJoined();
-
-  const { data: answerRevealedData } = useOnAnswerRevealedSubscription({
-    variables: {},
-  });  
-
-  if (answerRevealedData) {
-    console.log('answerRevealed', answerRevealedData);
-  }
+  useAnswerRevealed();
 
   if (currentGame?.token) {
     return (

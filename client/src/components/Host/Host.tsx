@@ -5,9 +5,9 @@ import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
   const { 
-    correctAnswers,
+    // correctAnswers,
     hasEnded,
-    setCorrectAnswers,      
+    // setCorrectAnswers,      
     setStrikes,
     token
   } = useContext(GameContext);  
@@ -24,11 +24,11 @@ export const Host: React.FC = () => {
       <h1>Host</h1>
       <h2>Game Token: {token}</h2>
       <Answers>
-        {({ id, text}) => (
+        {({ id, revealed, text}) => (
           <button 
-            disabled={hasEnded || correctAnswers.includes(id)}
+            disabled={hasEnded || revealed}
             onClick={(e) => {
-              setCorrectAnswers(answers => [...answers, id]);
+              // setCorrectAnswers(answers => [...answers, id]);
               revealAnswer({
                 variables: {
                   token,
@@ -47,7 +47,7 @@ export const Host: React.FC = () => {
             <h2>Round Over</h2>
             <button onClick={() => {
               setStrikes(0);
-              setCorrectAnswers([]);
+              // setCorrectAnswers([]);
             }}>
               Start Next Round
             </button>
