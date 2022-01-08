@@ -7,21 +7,23 @@ import { Player } from '../Player';
 import './Game.css';
 
 export const Game: React.FC = () => {
-  const { currentGame, playerName } = useStoreState();
+  const { game, players, currentPlayerName } = useStoreState();
   
   usePlayerJoined();
   useAnswerRevealed();
 
-  if (currentGame?.token) {
+  console.log('state change');
+
+  if (game?.token) {
     return (
       <div className="game">
         <GameProvider>
           <Status />
-          { playerName ? <Player /> : <Host />}
+          { currentPlayerName ? <Player /> : <Host />}
           <div>
             <h2>Players:</h2>
             <ul>
-              { currentGame.players?.map(player => <li key={player.name}>{player.name}</li>)}
+              { players?.map(player => <li key={player.name}>{player.name}</li>)}
             </ul>
           </div>
         </GameProvider>

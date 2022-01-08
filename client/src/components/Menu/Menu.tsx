@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { AppContext } from '../../contexts';
-import { Game, useCreateGameMutation, useJoinGameMutation } from '../../graphql/generated/types';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Game, Survey, useCreateGameMutation, useJoinGameMutation } from '../../graphql/generated/types';
 import { useDispatch } from '../../hooks';
 import { ActionTypes } from '../../store';
 import './Menu.css';
@@ -26,8 +25,10 @@ export const Menu: React.FC = () => {
       dispatch({
         type: ActionTypes.JoinExistingGame,
         payload: {
-          game: data.joinGame,
-          playerName
+          playerName,
+          token,
+          survey: data.joinGame.survey as Survey,
+          players: data.joinGame.players
         }
       });
     }
@@ -36,9 +37,14 @@ export const Menu: React.FC = () => {
   useEffect(() => {
     console.log('useCreateGame > useEffect', createGameData);
     if (createGameData?.createGame) {
+      const { token, players, survey } = createGameData.createGame
       dispatch({
-        type: ActionTypes.SetCurrentGame,
-        payload: createGameData.createGame as Game
+        type: ActionTypes.CreateGame,
+        payload: {
+          token: token,
+          players,
+          survey: survey as Survey
+        }
       });
     }
   }, [createGameData, dispatch]);  

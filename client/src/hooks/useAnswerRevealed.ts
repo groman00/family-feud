@@ -1,12 +1,12 @@
 import { useContext, useEffect, useMemo } from 'react';
-import { useOnAnswerRevealedSubscription, useOnPlayerJoinedSubscription } from '../graphql/generated/types';
+import { Survey, useOnAnswerRevealedSubscription, useOnPlayerJoinedSubscription } from '../graphql/generated/types';
 import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
 import { useStoreState } from './useStore';
 
 export const useAnswerRevealed = () => {
   const { dispatch } = useContext(AppContext);
-  const { currentGame } = useStoreState();  
+  const { survey } = useStoreState();  
   const { data } = useOnAnswerRevealedSubscription({
     variables: {},
   });  
@@ -16,17 +16,24 @@ export const useAnswerRevealed = () => {
   }
 
   useEffect(() => {
-    // TODO: If SetCurrentGame didn't cause Game to re-render,
-    // This check wouldn't be necessary.
-    if (!data?.answerRevealed?.survey?.answers.length || !currentGame?.survey?.answers.length) {
+    if (
+      !data?.answerRevealed || 
+      !survey || 
+      !data.answerRevealed.survey?.answers
+    ) {
       return;
-    }    
-    if (data?.answerRevealed) {
+    }
+
+    // TODO: Prevent this hook from running unless `data` actually changes.
+    console.log('useAnswerRevealed useEffect running')
+    const newRevealed = data.answerRevealed.survey.answers.filter(a => a.revealed).length;
+    const oldRevealed = survey.answers.filter(a => a.revealed).length;          
+    if (newRevealed > oldRevealed) {
       console.log('answerRevealed > useEffect', 'data: ', data);
       dispatch({
-          type: ActionTypes.SetCurrentGame,
+          type: ActionTypes.UpdateSurvey,
           payload: {
-            survey: data.answerRevealed.survey
+            survey: data.answerRevealed.survey as Survey
           }
         });
     }

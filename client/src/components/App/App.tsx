@@ -9,16 +9,17 @@ import { useOnGameCreatedSubscription } from '../../graphql/generated/types';
 function App() {
   const [state, dispatch] = useReducerWithMiddleware();
 
-  const { data, loading, error } = useOnGameCreatedSubscription({
-    variables: {},
-  });  
+  // const { data, loading, error } = useOnGameCreatedSubscription({
+  //   variables: {},
+  // });  
   
-  console.log('GAME CREATED: loading:', loading, 'data:', data, 'error:', error);
+  // console.log('GAME CREATED: loading:', loading, 'data:', data, 'error:', error);
 
   console.log('CURRENT STATE:', state);
   
   const toComponent = () => {
-    if (state.currentGame.token) {
+    // maybe a useeffect instead
+    if (state.game.token) {
       return <Game />;
     }
     return <Menu />

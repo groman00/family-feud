@@ -1,14 +1,18 @@
 import React from 'react';
-import { Game, Player } from '../graphql/generated/types';
+import { Game, Player, Survey } from '../graphql/generated/types';
 
 export interface State {
-  currentGame: Partial<Game>
-  playerName?: Player['name']
+  game: Pick<Game, 'token'>,
+  currentPlayerName?: string,
+  players?: Player[],
+  survey?: Survey
 }
 
 export enum ActionTypes {
   JoinExistingGame = 'joinExistingGame',
-  SetCurrentGame = 'setCurrentGame',
+  CreateGame = 'createGame',
+  UpdatePlayers = 'updatePlayers',
+  UpdateSurvey = 'updateSurvey',
 }
 
 export type ActionCreator = (dispatch: React.Dispatch<Action>) => void;
@@ -17,17 +21,35 @@ export type Action =
   | { 
       type: ActionTypes.JoinExistingGame,
       payload: {
-        game: Game,
-        playerName: Player['name'],
+        token: Game['token'],
+        playerName: string,
+        players: Player[]        
+        survey: Survey, 
       }
     } 
   | { 
-      type: ActionTypes.SetCurrentGame,
-      payload: Partial<Game>
+      type: ActionTypes.CreateGame,
+      payload: {
+        token: Game['token'],
+        players: Player[]        
+        survey: Survey,
+      }
     }
+  | { 
+      type: ActionTypes.UpdatePlayers,
+      payload: {
+        players: Player[]
+      }
+    }    
+    | { 
+      type: ActionTypes.UpdateSurvey,
+      payload: {
+        survey: Survey
+      }
+    }        
 
 export const initialState: State = {
-  currentGame: {},
+  game: {},
 };
 
 export function reducer(state: State, action: Action): State {
@@ -35,21 +57,32 @@ export function reducer(state: State, action: Action): State {
     case ActionTypes.JoinExistingGame:
       return {
         ...state,
-        currentGame: {
-          ...state.currentGame,
-          ...action.payload.game,
-        },
-        playerName: action.payload.playerName,
+        game: {
+          token: action.payload.token
+        },        
+        currentPlayerName: action.payload.playerName,
+        players: action.payload.players,
+        survey: action.payload.survey
       };
-    case ActionTypes.SetCurrentGame:
-      console.log('case ActionTypes.SetCurrentGame:', action.payload)
+    case ActionTypes.CreateGame:
       return {
         ...state,
-        currentGame: {
-          ...state.currentGame,
-          ...action.payload,          
-        }
-      };            
+        game: {
+          token: action.payload.token
+        },
+        players: action.payload.players,
+        survey: action.payload.survey
+      }; 
+      case ActionTypes.UpdatePlayers:
+        return {
+          ...state,
+          players: action.payload.players
+        };     
+      case ActionTypes.UpdateSurvey:
+        return {
+          ...state,
+          survey: action.payload.survey
+        };                             
     default:
       throw new Error();
   }

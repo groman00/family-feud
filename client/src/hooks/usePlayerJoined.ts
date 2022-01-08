@@ -6,28 +6,24 @@ import { useStoreState } from './useStore';
 
 export const usePlayerJoined = () => {
   const { dispatch } = useContext(AppContext);
-  const { currentGame } = useStoreState();
+  const { players } = useStoreState();
   const { data, loading, error } = useOnPlayerJoinedSubscription({
     variables: {},
   });
-  const hasMore = useMemo(() => {
-    // TODO: If SetCurrentGame didn't cause Game to re-render,
-    // This check wouldn't be necessary.
-    if (!data?.playerJoined?.players || !currentGame?.players?.length) {
-      return false;
-    }
-    return data.playerJoined.players.length > currentGame.players.length
-  }, [data, currentGame]);
 
   useEffect(() => {
-    if (data?.playerJoined && hasMore) {
+    if (
+      data?.playerJoined && 
+      players && 
+      data.playerJoined.players.length > players.length
+    ) {
       console.log('playerJoinedSubscription > useEffect', 'data: ', data, 'loading: ', loading, 'error:', error);
       dispatch({
-          type: ActionTypes.SetCurrentGame,
+          type: ActionTypes.UpdatePlayers,
           payload: {
             players: data.playerJoined.players
           }
         });
     }
-  }, [data, loading, error, dispatch, hasMore]);
+  }, [data, loading, error, dispatch, players]);
 };

@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import { useRevealAnswerMutation } from "../../graphql/generated/types";
+import { useStoreState } from "../../hooks";
 import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
   const { 
-    // correctAnswers,
     hasEnded,
-    // setCorrectAnswers,      
     setStrikes,
-    token
+    // token
   } = useContext(GameContext);  
+  const { game: { token } } =  useStoreState();
   const [revealAnswer, 
     //{ data, loading, error }
   ] = useRevealAnswerMutation();    
@@ -28,7 +28,6 @@ export const Host: React.FC = () => {
           <button 
             disabled={hasEnded || revealed}
             onClick={(e) => {
-              // setCorrectAnswers(answers => [...answers, id]);
               revealAnswer({
                 variables: {
                   token,
@@ -47,7 +46,6 @@ export const Host: React.FC = () => {
             <h2>Round Over</h2>
             <button onClick={() => {
               setStrikes(0);
-              // setCorrectAnswers([]);
             }}>
               Start Next Round
             </button>
