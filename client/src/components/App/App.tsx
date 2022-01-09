@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './App.css';
 import { Menu } from '../Menu';
 import { AppContext } from '../../contexts';
 import { useReducerWithMiddleware } from '../../store';
 import { Game } from '../Game'
-import { useOnGameCreatedSubscription } from '../../graphql/generated/types';
+// import { useOnGameCreatedSubscription } from '../../graphql/generated/types';
 
 function App() {
   const [state, dispatch] = useReducerWithMiddleware();
@@ -17,13 +17,13 @@ function App() {
 
   console.log('CURRENT STATE:', state);
   
-  const toComponent = () => {
-    // maybe a useeffect instead
+  const toComponent = useCallback(() => {
     if (state.game.token) {
-      return <Game />;
+      return <Game token={state.game.token}/>;
     }
     return <Menu />
-  }
+  }, [state.game.token]);
+
 
   return (
     <div className="App">

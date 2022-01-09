@@ -3,35 +3,44 @@ import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContex
 import { useAnswerRevealed, usePlayerJoined, useStoreState } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
+import { Game as TGame } from '../../graphql/generated/types';
 
 import './Game.css';
 
-export const Game: React.FC = () => {
-  const { game, players, currentPlayerName } = useStoreState();
-  
+export const Game: React.FC<{ token: TGame['token']}> = ({ token }) => {
   usePlayerJoined();
   useAnswerRevealed();
 
-  console.log('state change');
-
-  if (game?.token) {
+  if (token) {
     return (
       <div className="game">
         <GameProvider>
           <Status />
-          { currentPlayerName ? <Player /> : <Host />}
-          <div>
-            <h2>Players:</h2>
-            <ul>
-              { players?.map(player => <li key={player.name}>{player.name}</li>)}
-            </ul>
-          </div>
+          <CurrentPlayer />
+          <Players />
         </GameProvider>
       </div>
     );
   }
 
   return null;
+}
+
+const CurrentPlayer: React.FC = () => {
+  const { currentPlayerName } = useStoreState();
+  return currentPlayerName ? <Player /> : <Host />;
+}
+
+const Players: React.FC = () => {
+  const { players } = useStoreState();
+  return (
+    <div>
+      <h2>Players:</h2>
+      <ul>
+        { players?.map(player => <li key={player.name}>{player.name}</li>)}
+      </ul>
+    </div>    
+  );
 }
 
 const Status: React.FC = () => {

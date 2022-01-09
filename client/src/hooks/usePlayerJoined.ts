@@ -2,22 +2,16 @@ import { useContext, useEffect, useMemo } from 'react';
 import { useOnPlayerJoinedSubscription } from '../graphql/generated/types';
 import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
-import { useStoreState } from './useStore';
 
 export const usePlayerJoined = () => {
   const { dispatch } = useContext(AppContext);
-  const { players } = useStoreState();
-  const { data, loading, error } = useOnPlayerJoinedSubscription({
+  const { data } = useOnPlayerJoinedSubscription({
     variables: {},
   });
 
   useEffect(() => {
-    if (
-      data?.playerJoined && 
-      players && 
-      data.playerJoined.players.length > players.length
-    ) {
-      console.log('playerJoinedSubscription > useEffect', 'data: ', data, 'loading: ', loading, 'error:', error);
+    console.log('usePlayerJoined useEffect()', data);
+    if (data?.playerJoined) {
       dispatch({
           type: ActionTypes.UpdatePlayers,
           payload: {
@@ -25,5 +19,5 @@ export const usePlayerJoined = () => {
           }
         });
     }
-  }, [data, loading, error, dispatch, players]);
+  }, [data?.playerJoined]);
 };

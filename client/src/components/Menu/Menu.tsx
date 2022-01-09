@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Game, Survey, useCreateGameMutation, useJoinGameMutation } from '../../graphql/generated/types';
+import { Survey, useCreateGameMutation, useJoinGameMutation } from '../../graphql/generated/types';
 import { useDispatch } from '../../hooks';
 import { ActionTypes } from '../../store';
 import './Menu.css';
@@ -32,7 +32,7 @@ export const Menu: React.FC = () => {
         }
       });
     }
-  }, [data, error, dispatch, playerName]);
+  }, [data?.joinGame]);
 
   useEffect(() => {
     console.log('useCreateGame > useEffect', createGameData);
@@ -47,7 +47,7 @@ export const Menu: React.FC = () => {
         }
       });
     }
-  }, [createGameData, dispatch]);  
+  }, [createGameData?.createGame]);  
 
   return (
     <div className="menu">
