@@ -1,8 +1,7 @@
-import { useContext, useEffect, useMemo } from 'react';
-import { Survey, useOnAnswerRevealedSubscription, useOnPlayerJoinedSubscription } from '../graphql/generated/types';
+import { useContext, useEffect } from 'react';
+import { Survey, useOnAnswerRevealedSubscription } from '../graphql/generated/types';
 import { AppContext } from '../contexts';
 import { ActionTypes } from '../store';
-import { useStoreState } from './useStore';
 
 export const useAnswerRevealed = () => {
   const { dispatch } = useContext(AppContext);
