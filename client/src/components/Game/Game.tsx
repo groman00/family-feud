@@ -7,10 +7,12 @@ import { Game as TGame } from '../../graphql/generated/types';
 
 import './Game.css';
 import { getCurrentPlayerName, getPlayers, getStrikes } from '../../store';
+import { useStrikeGiven } from '../../hooks/useStrikeGiven';
 
 export const Game: React.FC<{ token: TGame['token']}> = ({ token }) => {
   usePlayerJoined();
   useAnswerRevealed();
+  useStrikeGiven();
 
   if (token) {
     return (
