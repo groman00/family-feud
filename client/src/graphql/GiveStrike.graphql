@@ -1,0 +1,5 @@
+mutation GiveStrike($surveyId: String!) {
+  giveStrike(surveyId: $surveyId) {
+    ...GameFields
+  }
+}

@@ -44,12 +44,14 @@ const typeDefs = gql`
     createGame: Game
     joinGame(token: String!, playerName: String!): Game
     revealAnswer(answerId: String!, token: String!): Game
+    giveStrike(surveyId: String!): Game
   }
   
   type Subscription {
     gameCreated: Game
     playerJoined: Game,
     answerRevealed: Game,
+    strikeGiven: Game
   }
 `;
 

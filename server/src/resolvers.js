@@ -100,7 +100,31 @@ module.exports = (models, pubsub) => ({
       pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
       
       return game;
-    },    
+    },  
+    giveStrike: async (_, { surveyId }) => {
+      const survey = await models.Survey.findOne({
+        where: {
+          id: surveyId
+        }
+      });
+
+      if (survey.strikes < 3) {
+        await survey.update({
+          strikes: survey.strikes + 1
+        });
+        await survey.save();
+      }
+      
+      const game = await models.Game.findOne({
+        where: {
+          id: survey.gameId
+        }
+      });      
+
+      pubsub.publish('STRIKE_GIVEN', { strikeGiven: game });      
+      
+      return game;
+    }      
   },
   Subscription: {
     gameCreated: {
@@ -111,6 +135,9 @@ module.exports = (models, pubsub) => ({
     },   
     answerRevealed: {
       subscribe: () => pubsub.asyncIterator(['ANSWER_REVEALED']),
-    },        
+    },   
+    strikeGiven: {
+      subscribe: () => pubsub.asyncIterator(['STRIKE_GIVEN']),
+    },            
   },  
 });

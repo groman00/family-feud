@@ -36,6 +36,7 @@ export type Mutation = {
   createGame?: Maybe<Game>;
   joinGame?: Maybe<Game>;
   revealAnswer?: Maybe<Game>;
+  giveStrike?: Maybe<Game>;
 };
 
 
@@ -48,6 +49,11 @@ export type MutationJoinGameArgs = {
 export type MutationRevealAnswerArgs = {
   answerId: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationGiveStrikeArgs = {
+  surveyId: Scalars['String'];
 };
 
 export type Player = {
@@ -73,6 +79,7 @@ export type Subscription = {
   gameCreated?: Maybe<Game>;
   playerJoined?: Maybe<Game>;
   answerRevealed?: Maybe<Game>;
+  strikeGiven?: Maybe<Game>;
 };
 
 export type Survey = {
@@ -91,6 +98,19 @@ export type CreateGameMutationVariables = Exact<{ [key: string]: never; }>;
 export type CreateGameMutation = (
   { __typename?: 'Mutation' }
   & { createGame?: Maybe<(
+    { __typename?: 'Game' }
+    & GameFieldsFragment
+  )> }
+);
+
+export type GiveStrikeMutationVariables = Exact<{
+  surveyId: Scalars['String'];
+}>;
+
+
+export type GiveStrikeMutation = (
+  { __typename?: 'Mutation' }
+  & { giveStrike?: Maybe<(
     { __typename?: 'Game' }
     & GameFieldsFragment
   )> }
@@ -188,6 +208,17 @@ export type GameFieldsFragment = (
   )> }
 );
 
+export type OnStrikeGivenSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnStrikeGivenSubscription = (
+  { __typename?: 'Subscription' }
+  & { strikeGiven?: Maybe<(
+    { __typename?: 'Game' }
+    & GameFieldsFragment
+  )> }
+);
+
 export const GameFieldsFragmentDoc = gql`
     fragment GameFields on Game {
   survey {
@@ -243,6 +274,39 @@ export function useCreateGameMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
 export type CreateGameMutationResult = Apollo.MutationResult<CreateGameMutation>;
 export type CreateGameMutationOptions = Apollo.BaseMutationOptions<CreateGameMutation, CreateGameMutationVariables>;
+export const GiveStrikeDocument = gql`
+    mutation GiveStrike($surveyId: String!) {
+  giveStrike(surveyId: $surveyId) {
+    ...GameFields
+  }
+}
+    ${GameFieldsFragmentDoc}`;
+export type GiveStrikeMutationFn = Apollo.MutationFunction<GiveStrikeMutation, GiveStrikeMutationVariables>;
+
+/**
+ * __useGiveStrikeMutation__
+ *
+ * To run a mutation, you first call `useGiveStrikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGiveStrikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [giveStrikeMutation, { data, loading, error }] = useGiveStrikeMutation({
+ *   variables: {
+ *      surveyId: // value for 'surveyId'
+ *   },
+ * });
+ */
+export function useGiveStrikeMutation(baseOptions?: Apollo.MutationHookOptions<GiveStrikeMutation, GiveStrikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GiveStrikeMutation, GiveStrikeMutationVariables>(GiveStrikeDocument, options);
+      }
+export type GiveStrikeMutationHookResult = ReturnType<typeof useGiveStrikeMutation>;
+export type GiveStrikeMutationResult = Apollo.MutationResult<GiveStrikeMutation>;
+export type GiveStrikeMutationOptions = Apollo.BaseMutationOptions<GiveStrikeMutation, GiveStrikeMutationVariables>;
 export const JoinGameDocument = gql`
     mutation JoinGame($token: String!, $playerName: String!) {
   joinGame(token: $token, playerName: $playerName) {
@@ -441,3 +505,32 @@ export function useSurveysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Su
 export type SurveysQueryHookResult = ReturnType<typeof useSurveysQuery>;
 export type SurveysLazyQueryHookResult = ReturnType<typeof useSurveysLazyQuery>;
 export type SurveysQueryResult = Apollo.QueryResult<SurveysQuery, SurveysQueryVariables>;
+export const OnStrikeGivenDocument = gql`
+    subscription onStrikeGiven {
+  strikeGiven {
+    ...GameFields
+  }
+}
+    ${GameFieldsFragmentDoc}`;
+
+/**
+ * __useOnStrikeGivenSubscription__
+ *
+ * To run a query within a React component, call `useOnStrikeGivenSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnStrikeGivenSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnStrikeGivenSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnStrikeGivenSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnStrikeGivenSubscription, OnStrikeGivenSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnStrikeGivenSubscription, OnStrikeGivenSubscriptionVariables>(OnStrikeGivenDocument, options);
+      }
+export type OnStrikeGivenSubscriptionHookResult = ReturnType<typeof useOnStrikeGivenSubscription>;
+export type OnStrikeGivenSubscriptionResult = Apollo.SubscriptionResult<OnStrikeGivenSubscription>;

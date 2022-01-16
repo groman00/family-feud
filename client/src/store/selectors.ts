@@ -2,7 +2,7 @@ import { State } from "../store";
 
 export const getPlayers = (state: State) => state.players;
 
-export const getSurvey = (state: State) => state.survey;
+export const getSurvey = (state: State) => state.survey!;
 
 export const getCurrentPlayerName = (state: State) => state.currentPlayerName;
 

@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
-import { useRevealAnswerMutation } from "../../graphql/generated/types";
+import { useGiveStrikeMutation, useRevealAnswerMutation } from "../../graphql/generated/types";
 import { useSelector } from "../../hooks";
-import { getGameToken } from "../../store";
+import { getGameToken, getSurvey } from "../../store";
 import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
@@ -12,9 +12,9 @@ export const Host: React.FC = () => {
     // token
   } = useContext(GameContext);  
   const token =  useSelector(getGameToken);
-  const [revealAnswer, 
-    //{ data, loading, error }
-  ] = useRevealAnswerMutation();    
+  const { id: surveyId } =  useSelector(getSurvey);
+  const [revealAnswer] = useRevealAnswerMutation();    
+  const [giveStrike] = useGiveStrikeMutation();    
 
   if (!token) {
     return null;
@@ -52,7 +52,14 @@ export const Host: React.FC = () => {
             </button>
           </div>  
         ) : (
-          <button onClick={() => setStrikes(strikes => strikes + 1)}>
+          <button onClick={() => {
+            setStrikes(strikes => strikes + 1)
+            giveStrike({
+              variables: {
+                surveyId
+              }
+            });
+          }}>
             STRIKE
           </button>
         )
