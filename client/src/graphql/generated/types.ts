@@ -82,6 +82,7 @@ export type Survey = {
   totalAnswers?: Maybe<Scalars['Int']>;
   answers: Array<Answer>;
   gameId?: Maybe<Scalars['Int']>;
+  strikes: Scalars['Int'];
 };
 
 export type CreateGameMutationVariables = Exact<{ [key: string]: never; }>;
@@ -176,7 +177,7 @@ export type GameFieldsFragment = (
   & Pick<Game, 'token'>
   & { survey?: Maybe<(
     { __typename?: 'Survey' }
-    & Pick<Survey, 'id' | 'title' | 'totalAnswers'>
+    & Pick<Survey, 'id' | 'title' | 'totalAnswers' | 'strikes'>
     & { answers: Array<(
       { __typename?: 'Answer' }
       & Pick<Answer, 'id' | 'surveyId' | 'text' | 'count' | 'rank' | 'revealed'>
@@ -201,6 +202,7 @@ export const GameFieldsFragmentDoc = gql`
       rank
       revealed
     }
+    strikes
   }
   token
   players {

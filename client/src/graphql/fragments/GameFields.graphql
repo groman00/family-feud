@@ -11,6 +11,7 @@ fragment GameFields on Game {
       rank
       revealed
     }
+    strikes
   }
   token
   players {

@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
   Survey.init({
     title: DataTypes.STRING,
     totalAnswers: DataTypes.INTEGER,
-    gameId: DataTypes.INTEGER
+    gameId: DataTypes.INTEGER,
+    strikes: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Survey',

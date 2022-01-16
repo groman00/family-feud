@@ -7,3 +7,5 @@ export const getSurvey = (state: State) => state.survey;
 export const getCurrentPlayerName = (state: State) => state.currentPlayerName;
 
 export const getGameToken = (state: State) => state.game.token;
+
+export const getStrikes = (state: State) => state.survey?.strikes;

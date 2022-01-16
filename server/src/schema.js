@@ -16,6 +16,7 @@ const typeDefs = gql`
     totalAnswers: Int
     answers: [Answer!]!
     gameId: Int
+    strikes: Int!
   }
 
   type Player {
