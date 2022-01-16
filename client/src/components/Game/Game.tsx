@@ -1,18 +1,16 @@
 import React, { useContext } from 'react';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
-import { useAnswerRevealed, usePlayerJoined, useSelector } from '../../hooks';
+import { useSelector } from '../../hooks';
 import { Host } from '../Host';
 import { Player } from '../Player';
-import { Game as TGame } from '../../graphql/generated/types';
-
+import { Game as TGame, } from '../../graphql/generated/types';
 import './Game.css';
 import { getCurrentPlayerName, getPlayers, getStrikes } from '../../store';
-import { useStrikeGiven } from '../../hooks/useStrikeGiven';
+import useGameSubscriptions from './useGameSubscriptions';
 
 export const Game: React.FC<{ token: TGame['token']}> = ({ token }) => {
-  usePlayerJoined();
-  useAnswerRevealed();
-  useStrikeGiven();
+  
+  useGameSubscriptions();
 
   if (token) {
     return (
