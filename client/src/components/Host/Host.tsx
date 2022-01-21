@@ -6,11 +6,7 @@ import { getGameToken, getSurvey } from "../../store";
 import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
-  const { 
-    hasEnded,
-    setStrikes,
-    // token
-  } = useContext(GameContext);  
+  const { hasEnded } = useContext(GameContext);  
   const token =  useSelector(getGameToken);
   const { id: surveyId } =  useSelector(getSurvey);
   const [revealAnswer] = useRevealAnswerMutation();    
@@ -46,14 +42,13 @@ export const Host: React.FC = () => {
           <div>
             <h2>Round Over</h2>
             <button onClick={() => {
-              setStrikes(0);
+              alert('coming soon!');
             }}>
               Start Next Round
             </button>
           </div>  
         ) : (
           <button onClick={() => {
-            setStrikes(strikes => strikes + 1)
             giveStrike({
               variables: {
                 surveyId

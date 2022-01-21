@@ -11,11 +11,11 @@ type SubscriptionProps<TData, TVariables> = {
   onChange: (response: TData) => void
 };
 
-export const useSubscription = <T, R>({
+export const useSubscription = <T, V>({
   subscriptionHook,
   key,
   onChange
-}: SubscriptionProps<T, R>) => {
+}: SubscriptionProps<T, V>) => {
   const { data } = subscriptionHook();  
   useEffect(() => {
     if (data?.[key]) {

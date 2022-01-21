@@ -1,6 +1,8 @@
-import React, { useContext, useMemo, useState } from "react";
-import { AppContext } from "./AppContext";
-import { Answer } from "../graphql/generated/types";
+import React, { useContext, useMemo } from 'react';
+import { AppContext } from './AppContext';
+import { Answer } from '../graphql/generated/types';
+import { useSelector } from '../hooks'
+import { getStrikes } from '../store';
 
 export enum GameStatus {
   InProgress = 'inProgress',
@@ -10,14 +12,10 @@ export enum GameStatus {
   Win = 'win',
 }
 
-// type AnswerIds = Array<Answer['id']>;
-
 interface Context {
   answers?: Answer[],
   status: GameStatus,
   hasEnded: boolean,
-  setStrikes: React.Dispatch<React.SetStateAction<number>>,
-  strikes: number,
   title: string
 }
 
@@ -25,7 +23,7 @@ export const GameContext = React.createContext<Context>({} as Context);
 
 export const GameProvider: React.FC = ({ children }) => {
   const { state: { survey } } = useContext(AppContext);
-  const [strikes, setStrikes] = useState(0);
+  const strikes = useSelector(getStrikes)
 
   const status: GameStatus = useMemo(() => {
     if (!survey) {
@@ -53,8 +51,6 @@ export const GameProvider: React.FC = ({ children }) => {
       answers: survey?.answers,
       status,
       hasEnded,
-      setStrikes,
-      strikes,
       title: survey?.title ?? '',
     }}>
       {children}
