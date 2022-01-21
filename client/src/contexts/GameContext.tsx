@@ -1,8 +1,6 @@
-import React, { useContext, useMemo } from 'react';
-import { AppContext } from './AppContext';
-import { Answer } from '../graphql/generated/types';
+import React, { useMemo, useCallback } from 'react';
 import { useSelector } from '../hooks'
-import { getStrikes } from '../store';
+import { getStrikes, getSurvey } from '../store';
 
 export enum GameStatus {
   InProgress = 'inProgress',
@@ -13,17 +11,19 @@ export enum GameStatus {
 }
 
 interface Context {
-  answers?: Answer[],
   status: GameStatus,
   hasEnded: boolean,
-  title: string
 }
 
 export const GameContext = React.createContext<Context>({} as Context);
 
 export const GameProvider: React.FC = ({ children }) => {
-  const { state: { survey } } = useContext(AppContext);
-  const strikes = useSelector(getStrikes)
+  const survey = useSelector(getSurvey);
+  const strikes = useSelector(getStrikes);
+
+  const isWinner = useCallback(() => 
+    survey.answers.filter(a => a.revealed).length === survey.answers.length, 
+  [survey.answers]);
 
   const status: GameStatus = useMemo(() => {
     if (!survey) {
@@ -32,13 +32,14 @@ export const GameProvider: React.FC = ({ children }) => {
     if (strikes > 2) {
       return GameStatus.Lose;
     }
-    // if (correctAnswers.length === survey.answers.length) {
-    //   return GameStatus.Win;
-    // }
+    if (isWinner()) {
+      return GameStatus.Win;
+    }
     return GameStatus.InProgress;
   }, [
     survey,
-    strikes
+    strikes,
+    isWinner
   ]);
 
   const hasEnded: boolean = useMemo(() => [
@@ -48,10 +49,8 @@ export const GameProvider: React.FC = ({ children }) => {
     
   return (
     <GameContext.Provider value={{
-      answers: survey?.answers,
       status,
       hasEnded,
-      title: survey?.title ?? '',
     }}>
       {children}
     </GameContext.Provider>

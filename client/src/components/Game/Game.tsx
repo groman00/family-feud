@@ -5,7 +5,7 @@ import { Host } from '../Host';
 import { Player } from '../Player';
 import { Game as TGame, } from '../../graphql/generated/types';
 import './Game.css';
-import { getCurrentPlayerName, getPlayers, getStrikes } from '../../store';
+import { getCurrentPlayerName, getPlayers, getStrikes, getSurvey } from '../../store';
 import useGameSubscriptions from './useGameSubscriptions';
 
 export const Game: React.FC<{ token: TGame['token']}> = ({ token }) => {
@@ -41,7 +41,8 @@ const Players: React.FC = () => (
 );
 
 const Status: React.FC = () => {
-  const { hasEnded, status, title } = useContext(GameContext);  
+  const { hasEnded, status } = useContext(GameContext);  
+  const { title } = useSelector(getSurvey);
   
   return (
     <div>
