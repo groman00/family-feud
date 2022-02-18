@@ -42,11 +42,11 @@ const Players: React.FC = () => (
 
 const Status: React.FC = () => {
   const { hasEnded, status } = useContext(GameContext);  
-  const { title } = useSelector(getSurvey);
+  const survey = useSelector(getSurvey);
   
   return (
     <div>
-      <h1>{title}</h1>
+      <h1>{survey?.title}</h1>
       <h3>{status === GameStatus.Win ? 'Winner' : 'In progress'}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
       <div>Strikes: {useSelector(getStrikes)}</div>

@@ -22,8 +22,8 @@ export const GameProvider: React.FC = ({ children }) => {
   const strikes = useSelector(getStrikes);
 
   const isWinner = useCallback(() => 
-    survey.answers.filter(a => a.revealed).length === survey.answers.length, 
-  [survey.answers]);
+    survey?.answers.filter(a => a.revealed).length === survey?.answers.length, 
+  [survey?.answers]);
 
   const status: GameStatus = useMemo(() => {
     if (!survey) {

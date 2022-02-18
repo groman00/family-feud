@@ -2,24 +2,44 @@ import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import { useGiveStrikeMutation, useRevealAnswerMutation } from "../../graphql/generated/types";
 import { useSelector } from "../../hooks";
-import { getGameToken, getSurvey } from "../../store";
+import { getGameToken, getPlayers, getSurvey } from "../../store";
 import { Answers } from "../Answers";
 
 export const Host: React.FC = () => {
-  const { hasEnded } = useContext(GameContext);  
   const token =  useSelector(getGameToken);
-  const { id: surveyId } =  useSelector(getSurvey);
-  const [revealAnswer] = useRevealAnswerMutation();    
-  const [giveStrike] = useGiveStrikeMutation();    
-
-  if (!token) {
-    return null;
-  }
+  const survey =  useSelector(getSurvey);  
   
   return (
     <div>
       <h1>Host</h1>
       <h2>Game Token: {token}</h2>
+      { survey ? <Survey /> : <Lobby />}
+    </div>
+  );
+}
+
+const Lobby: React.FC = () => (
+  <>
+    <h2>Lobby:</h2>
+    <ul>
+      { useSelector(getPlayers)?.map(player => <li key={player.name}>{player.name}</li>)}
+    </ul>
+  </>
+);
+
+const Survey: React.FC = () => {
+  const token =  useSelector(getGameToken);
+  const { hasEnded } = useContext(GameContext);  
+  const survey =  useSelector(getSurvey);
+  const [revealAnswer] = useRevealAnswerMutation();    
+  const [giveStrike] = useGiveStrikeMutation();      
+
+  if (!survey) {
+    return null;
+  }
+
+  return (
+    <>
       <Answers>
         {({ id, revealed, text}) => (
           <button 
@@ -51,14 +71,14 @@ export const Host: React.FC = () => {
           <button onClick={() => {
             giveStrike({
               variables: {
-                surveyId
+                surveyId: survey.id
               }
             });
           }}>
             STRIKE
           </button>
         )
-      }     
-    </div>
+      }  
+    </>   
   );
-}
+};

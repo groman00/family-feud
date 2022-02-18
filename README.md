@@ -17,3 +17,13 @@ npx sequelize-cli db:seed:all
 ___
 ### Surveys
 https://mstiescott.neocities.org/feud16.html
+
+___
+### Todos
+ - Changing turns
+ - Start new game
+ - Buzzing in
+ - Random survey selecting
+ - Teams
+ - Fast Money
+ - Survey Ingesting
