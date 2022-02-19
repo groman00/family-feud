@@ -1,8 +1,13 @@
-import { Answer } from "../../graphql/generated/types";
-import { useSelector } from "../../hooks";
-import { getSurvey } from "../../store";
+import * as React from 'react';
+import { Answer } from '../../graphql/generated/types';
+import { useSelector } from '../../hooks';
+import { getSurvey } from '../../store';
 
-export const Answers: React.FC<{ children: (answer: Answer) => React.ReactNode }> = ({ children }) => (
+type Props = {
+  children: (answer: Answer) => React.ReactNode
+}
+
+const Answers: React.FC<Props> = ({ children }) => (
   <div className="answers">
     {
       useSelector(getSurvey)?.answers.map(answer => (
@@ -13,3 +18,5 @@ export const Answers: React.FC<{ children: (answer: Answer) => React.ReactNode }
     }
   </div>
 );
+
+export default Answers;
