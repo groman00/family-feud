@@ -1,3 +1,1 @@
-import Answers from './Answers';
-
-export default Answers;
+export * from './Answers';

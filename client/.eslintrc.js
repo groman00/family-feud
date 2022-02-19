@@ -19,6 +19,7 @@ module.exports = {
     'react',
     '@typescript-eslint',
   ],
+  ignorePatterns: ['**/generated/*.ts'],
   rules: {
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
     'import/extensions': ['error', 'ignorePackages', { ts: 'never', tsx: 'never' }],

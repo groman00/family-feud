@@ -14,10 +14,10 @@ const useGameSubscriptions = () => {
       dispatch({
         type: ActionTypes.UpdatePlayers,
         payload: {
-          players: data.playerJoined?.players!
-        }
-      });   
-    }
+          players: data.playerJoined?.players!,
+        },
+      });
+    },
   });
 
   useSubscription({
@@ -27,10 +27,10 @@ const useGameSubscriptions = () => {
       dispatch({
         type: ActionTypes.UpdateSurvey,
         payload: {
-          survey: data.answerRevealed?.survey!
-        }
-      });   
-    }
+          survey: data.answerRevealed?.survey!,
+        },
+      });
+    },
   });
 
   useSubscription({
@@ -40,10 +40,10 @@ const useGameSubscriptions = () => {
       dispatch({
         type: ActionTypes.UpdateSurvey,
         payload: {
-          survey: data.strikeGiven?.survey!
-        }
-      });   
-    }
+          survey: data.strikeGiven?.survey!,
+        },
+      });
+    },
   });
 };
 

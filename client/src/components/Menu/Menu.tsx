@@ -4,20 +4,20 @@ import { useDispatch } from '../../hooks';
 import { ActionTypes } from '../../store';
 import './Menu.css';
 
-export const Menu: React.FC = () => {
+const Menu: React.FC = () => {
   const dispatch = useDispatch();
   const [createGameMutation, { data: createGameData }] = useCreateGameMutation({
     variables: {},
   });
   const [token, setToken] = useState<string>('');
   const [playerName, setPlayerName] = useState<string>('');
-  const canJoinGame = useMemo(() => Boolean(token && playerName), [token, playerName])
+  const canJoinGame = useMemo(() => Boolean(token && playerName), [token, playerName]);
   const [joinGame, { data, loading, error }] = useJoinGameMutation({
     variables: {
       token,
-      playerName
+      playerName,
     },
-  });  
+  });
 
   useEffect(() => {
     console.log('join game data: ', data, error);
@@ -28,8 +28,8 @@ export const Menu: React.FC = () => {
           playerName,
           token,
           survey: data.joinGame.survey as Survey,
-          players: data.joinGame.players
-        }
+          players: data.joinGame.players,
+        },
       });
     }
   }, [data?.joinGame]);
@@ -37,22 +37,23 @@ export const Menu: React.FC = () => {
   useEffect(() => {
     console.log('useCreateGame > useEffect', createGameData);
     if (createGameData?.createGame) {
-      const { token, players, survey } = createGameData.createGame
+      const { token: createdToken, players, survey } = createGameData.createGame;
       dispatch({
         type: ActionTypes.CreateGame,
         payload: {
-          token: token,
+          token: createdToken,
           players,
-          survey: survey as Survey
-        }
+          survey: survey as Survey,
+        },
       });
     }
-  }, [createGameData?.createGame]);  
+  }, [createGameData?.createGame]);
 
   return (
     <div className="menu">
       <div>
-        <button 
+        <button
+          type="button"
           onClick={() => createGameMutation()}
         >
           Create Game
@@ -61,23 +62,26 @@ export const Menu: React.FC = () => {
       <hr />
       <div>
         <h2>Join Game</h2>
-        <label>
-          Game Code: 
-          <input 
+        <label htmlFor="gameCodeInput">
+          Game Code:
+          <input
+            id="gameCodeInput"
             placeholder="Enter Game Code"
             value={token}
             onChange={e => setToken(e.target.value)}
           />
         </label>
-        <label>
-          Name: 
-          <input 
+        <label htmlFor="playerNameInput">
+          Name:
+          <input
+            id="playerNameInput"
             placeholder="Enter Your Name"
             value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}            
+            onChange={e => setPlayerName(e.target.value)}
           />
-        </label>        
-        <button 
+        </label>
+        <button
+          type="button"
           disabled={!canJoinGame || loading}
           onClick={() => joinGame()}
         >
@@ -85,5 +89,7 @@ export const Menu: React.FC = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Menu;

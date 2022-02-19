@@ -1,6 +1,7 @@
-import { Answers } from "../Answers";
+import React from 'react';
+import { Answers } from '../Answers';
 
-export const Player: React.FC = () => (
+const Player: React.FC = () => (
   <div>
     <h2>player</h2>
     <Answers>
@@ -8,3 +9,5 @@ export const Player: React.FC = () => (
     </Answers>
   </div>
 );
+
+export default Player;
