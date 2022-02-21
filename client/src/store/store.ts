@@ -1,8 +1,10 @@
 import React from 'react';
-import { Game, Player, Survey } from '../graphql/generated/types';
+import { Game as GGame, Player, Survey } from '../graphql/generated/types';
+
+type Game = Pick<GGame, 'token' | 'turn'>;
 
 export interface State {
-  game: Pick<Game, 'token' | 'turn'>,
+  game: Game,
   currentPlayerName?: string,
   players?: Player[],
   survey?: Survey
@@ -12,7 +14,7 @@ export enum ActionTypes {
   JoinExistingGame = 'joinExistingGame',
   CreateGame = 'createGame',
   UpdatePlayers = 'updatePlayers',
-  UpdateSurvey = 'updateSurvey',
+  UpdateGame = 'updateGame',
 }
 
 export type ActionCreator = (dispatch: React.Dispatch<Action>) => void;
@@ -21,7 +23,7 @@ export type Action =
   | {
       type: ActionTypes.JoinExistingGame,
       payload: {
-        token: Game['token'],
+        game: Game,
         playerName: string,
         players: Player[]
         survey: Survey,
@@ -30,7 +32,7 @@ export type Action =
   | {
       type: ActionTypes.CreateGame,
       payload: {
-        token: Game['token'],
+        game: Game,
         players: Player[]
         survey: Survey,
       }
@@ -42,8 +44,9 @@ export type Action =
       }
     }
     | {
-      type: ActionTypes.UpdateSurvey,
+      type: ActionTypes.UpdateGame,
       payload: {
+        game: Game,
         survey: Survey
       }
     }
@@ -57,9 +60,7 @@ export function reducer(state: State, action: Action): State {
     case ActionTypes.JoinExistingGame:
       return {
         ...state,
-        game: {
-          token: action.payload.token,
-        },
+        game: action.payload.game,
         currentPlayerName: action.payload.playerName,
         players: action.payload.players,
         survey: action.payload.survey,
@@ -67,9 +68,7 @@ export function reducer(state: State, action: Action): State {
     case ActionTypes.CreateGame:
       return {
         ...state,
-        game: {
-          token: action.payload.token,
-        },
+        game: action.payload.game,
         players: action.payload.players,
         survey: action.payload.survey,
       };
@@ -78,9 +77,10 @@ export function reducer(state: State, action: Action): State {
         ...state,
         players: action.payload.players,
       };
-    case ActionTypes.UpdateSurvey:
+    case ActionTypes.UpdateGame:
       return {
         ...state,
+        game: action.payload.game,
         survey: action.payload.survey,
       };
     default:
@@ -88,7 +88,7 @@ export function reducer(state: State, action: Action): State {
   }
 }
 
-type DispatchableAction = Action | ActionCreator;
+export type DispatchableAction = Action | ActionCreator;
 
 export type Dispatch = React.Dispatch<DispatchableAction>;
 

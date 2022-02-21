@@ -26,7 +26,10 @@ const Menu: React.FC = () => {
         type: ActionTypes.JoinExistingGame,
         payload: {
           playerName,
-          token,
+          game: {
+            turn: data.joinGame.turn,
+            token,
+          },
           survey: data.joinGame.survey as Survey,
           players: data.joinGame.players,
         },
@@ -37,11 +40,16 @@ const Menu: React.FC = () => {
   useEffect(() => {
     console.log('useCreateGame > useEffect', createGameData);
     if (createGameData?.createGame) {
-      const { token: createdToken, players, survey } = createGameData.createGame;
+      const {
+        token: createdToken, players, survey, turn,
+      } = createGameData.createGame;
       dispatch({
         type: ActionTypes.CreateGame,
         payload: {
-          token: createdToken,
+          game: {
+            token: createdToken,
+            turn,
+          },
           players,
           survey: survey as Survey,
         },
