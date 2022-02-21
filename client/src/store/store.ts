@@ -17,36 +17,36 @@ export enum ActionTypes {
 
 export type ActionCreator = (dispatch: React.Dispatch<Action>) => void;
 
-export type Action = 
-  | { 
+export type Action =
+  | {
       type: ActionTypes.JoinExistingGame,
       payload: {
         token: Game['token'],
         playerName: string,
-        players: Player[]        
-        survey: Survey, 
-      }
-    } 
-  | { 
-      type: ActionTypes.CreateGame,
-      payload: {
-        token: Game['token'],
-        players: Player[]        
+        players: Player[]
         survey: Survey,
       }
     }
-  | { 
+  | {
+      type: ActionTypes.CreateGame,
+      payload: {
+        token: Game['token'],
+        players: Player[]
+        survey: Survey,
+      }
+    }
+  | {
       type: ActionTypes.UpdatePlayers,
       payload: {
         players: Player[]
       }
-    }    
-    | { 
+    }
+    | {
       type: ActionTypes.UpdateSurvey,
       payload: {
         survey: Survey
       }
-    }        
+    }
 
 export const initialState: State = {
   game: {},
@@ -58,31 +58,31 @@ export function reducer(state: State, action: Action): State {
       return {
         ...state,
         game: {
-          token: action.payload.token
-        },        
+          token: action.payload.token,
+        },
         currentPlayerName: action.payload.playerName,
         players: action.payload.players,
-        survey: action.payload.survey
+        survey: action.payload.survey,
       };
     case ActionTypes.CreateGame:
       return {
         ...state,
         game: {
-          token: action.payload.token
+          token: action.payload.token,
         },
         players: action.payload.players,
-        survey: action.payload.survey
-      }; 
-      case ActionTypes.UpdatePlayers:
-        return {
-          ...state,
-          players: action.payload.players
-        };     
-      case ActionTypes.UpdateSurvey:
-        return {
-          ...state,
-          survey: action.payload.survey
-        };                             
+        survey: action.payload.survey,
+      };
+    case ActionTypes.UpdatePlayers:
+      return {
+        ...state,
+        players: action.payload.players,
+      };
+    case ActionTypes.UpdateSurvey:
+      return {
+        ...state,
+        survey: action.payload.survey,
+      };
     default:
       throw new Error();
   }
@@ -94,7 +94,7 @@ export type Dispatch = React.Dispatch<DispatchableAction>;
 
 export const useReducerWithMiddleware = (): [State, Dispatch] => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
- 
+
   const dispatchWithMiddleware = (action: DispatchableAction) => {
     console.log('dispatch', action);
     if (typeof action === 'function') {
@@ -103,6 +103,6 @@ export const useReducerWithMiddleware = (): [State, Dispatch] => {
       dispatch(action);
     }
   };
- 
+
   return [state, dispatchWithMiddleware];
 };

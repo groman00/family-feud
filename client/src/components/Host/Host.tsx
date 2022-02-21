@@ -1,22 +1,9 @@
-import { useContext } from "react";
-import { GameContext } from "../../contexts/GameContext";
-import { useGiveStrikeMutation, useRevealAnswerMutation } from "../../graphql/generated/types";
-import { useSelector } from "../../hooks";
-import { getGameToken, getPlayers, getSurvey } from "../../store";
-import { Answers } from "../Answers";
-
-export const Host: React.FC = () => {
-  const token =  useSelector(getGameToken);
-  const survey =  useSelector(getSurvey);  
-  
-  return (
-    <div>
-      <h1>Host</h1>
-      <h2>Game Token: {token}</h2>
-      { survey ? <Survey /> : <Lobby />}
-    </div>
-  );
-}
+import React, { useContext } from 'react';
+import { GameContext } from '../../contexts/GameContext';
+import { useGiveStrikeMutation, useRevealAnswerMutation } from '../../graphql/generated/types';
+import { useSelector } from '../../hooks';
+import { getGameToken, getPlayers, getSurvey } from '../../store';
+import Answers from '../Answers';
 
 const Lobby: React.FC = () => (
   <>
@@ -28,11 +15,11 @@ const Lobby: React.FC = () => (
 );
 
 const Survey: React.FC = () => {
-  const token =  useSelector(getGameToken);
-  const { hasEnded } = useContext(GameContext);  
-  const survey =  useSelector(getSurvey);
-  const [revealAnswer] = useRevealAnswerMutation();    
-  const [giveStrike] = useGiveStrikeMutation();      
+  const token = useSelector(getGameToken);
+  const { hasEnded } = useContext(GameContext);
+  const survey = useSelector(getSurvey);
+  const [revealAnswer] = useRevealAnswerMutation();
+  const [giveStrike] = useGiveStrikeMutation();
 
   if (!survey) {
     return null;
@@ -41,15 +28,16 @@ const Survey: React.FC = () => {
   return (
     <>
       <Answers>
-        {({ id, revealed, text}) => (
-          <button 
+        {({ id, revealed, text }) => (
+          <button
+            type="button"
             disabled={hasEnded || revealed}
-            onClick={(e) => {
+            onClick={e => {
               revealAnswer({
                 variables: {
                   token,
-                  answerId: id
-                }
+                  answerId: id,
+                },
               });
             }}
           >
@@ -61,24 +49,50 @@ const Survey: React.FC = () => {
         hasEnded ? (
           <div>
             <h2>Round Over</h2>
-            <button onClick={() => {
-              alert('coming soon!');
-            }}>
+            <button
+              type="button"
+              onClick={() => {
+                alert('coming soon!');
+              }}
+            >
               Start Next Round
             </button>
-          </div>  
+          </div>
         ) : (
-          <button onClick={() => {
-            giveStrike({
-              variables: {
-                surveyId: survey.id
-              }
-            });
-          }}>
+          <button
+            type="button"
+            onClick={() => {
+              giveStrike({
+                variables: {
+                  surveyId: survey.id,
+                },
+              });
+            }}
+          >
             STRIKE
           </button>
         )
-      }  
-    </>   
+      }
+    </>
   );
 };
+
+const Host: React.FC = () => {
+  const token = useSelector(getGameToken);
+
+  const survey = useSelector(getSurvey);
+
+  return (
+    <div>
+      <h1>Host</h1>
+      <h2>
+        Game Token:
+        {' '}
+        {token}
+      </h2>
+      { survey ? <Survey /> : <Lobby />}
+    </div>
+  );
+};
+
+export default Host;

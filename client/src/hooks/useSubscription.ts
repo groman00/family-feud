@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import * as Apollo from '@apollo/client';
 
 type SubscriptionProps<TData, TVariables> = {
@@ -11,15 +11,17 @@ type SubscriptionProps<TData, TVariables> = {
   onChange: (response: TData) => void
 };
 
-export const useSubscription = <T, V>({
+const useSubscription = <T, V>({
   subscriptionHook,
   key,
-  onChange
+  onChange,
 }: SubscriptionProps<T, V>) => {
-  const { data } = subscriptionHook();  
+  const { data } = subscriptionHook();
   useEffect(() => {
     if (data?.[key]) {
       onChange(data);
     }
   }, [data?.[key]]);
 };
+
+export default useSubscription;
