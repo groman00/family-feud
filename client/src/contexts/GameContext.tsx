@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { useSelector } from '../hooks'
+import { useSelector } from '../hooks';
 import { getStrikes, getSurvey } from '../store';
 
 export enum GameStatus {
@@ -21,9 +21,10 @@ export const GameProvider: React.FC = ({ children }) => {
   const survey = useSelector(getSurvey);
   const strikes = useSelector(getStrikes);
 
-  const isWinner = useCallback(() => 
-    survey?.answers.filter(a => a.revealed).length === survey?.answers.length, 
-  [survey?.answers]);
+  const isWinner = useCallback(
+    () => survey?.answers.filter(a => a.revealed).length === survey?.answers.length,
+    [survey?.answers],
+  );
 
   const status: GameStatus = useMemo(() => {
     if (!survey) {
@@ -39,20 +40,23 @@ export const GameProvider: React.FC = ({ children }) => {
   }, [
     survey,
     strikes,
-    isWinner
+    isWinner,
   ]);
 
   const hasEnded: boolean = useMemo(() => [
-    GameStatus.Win, 
-    GameStatus.Lose
-  ].includes(status), [status]);  
-    
+    GameStatus.Win,
+    GameStatus.Lose,
+  ].includes(status), [status]);
+
+  // Todo: Make sure this works.
+  const value = useMemo(() => ({
+    status,
+    hasEnded,
+  }), []);
+
   return (
-    <GameContext.Provider value={{
-      status,
-      hasEnded,
-    }}>
+    <GameContext.Provider value={value}>
       {children}
     </GameContext.Provider>
   );
-}
+};

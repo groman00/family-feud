@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import './App.css';
-import { Menu } from '../Menu';
+import Menu from '../Menu';
 import { AppContext } from '../../contexts';
 import { useReducerWithMiddleware } from '../../store';
-import { Game } from '../Game';
+import Game from '../Game';
 // import { useOnGameCreatedSubscription } from '../../graphql/generated/types';
 
 const App = () => {

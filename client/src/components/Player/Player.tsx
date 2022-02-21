@@ -1,5 +1,5 @@
 import React from 'react';
-import { Answers } from '../Answers';
+import Answers from '../Answers';
 
 const Player: React.FC = () => (
   <div>

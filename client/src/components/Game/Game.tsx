@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GameContext, GameProvider, GameStatus } from '../../contexts/GameContext';
 import { useSelector } from '../../hooks';
 import Host from '../Host';
-import { Player } from '../Player';
+import Player from '../Player';
 import { Game as TGame } from '../../graphql/generated/types';
 import './Game.css';
 import {

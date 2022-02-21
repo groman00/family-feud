@@ -21,10 +21,12 @@ module.exports = {
   ],
   ignorePatterns: ['**/generated/*.ts'],
   rules: {
-    'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
-    'import/extensions': ['error', 'ignorePackages', { ts: 'never', tsx: 'never' }],
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error'],
+    'no-unused-vars': 'off',
+    'arrow-parens': ['error', 'as-needed'],
+    'no-shadow': 'off',
+    'import/extensions': ['error', 'ignorePackages', { ts: 'never', tsx: 'never' }],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
     'react/function-component-definition': [
       2,
       {
@@ -32,8 +34,8 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
-    'no-unused-vars': 'off',
-    'arrow-parens': ['error', 'as-needed'],
+    '@typescript-eslint/no-shadow': ['error'],
+    '@typescript-eslint/no-use-before-define': ['error'],
   },
   settings: {
     'import/resolver': {

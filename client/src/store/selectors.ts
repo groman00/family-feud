@@ -1,4 +1,4 @@
-import { State } from "../store";
+import { State } from './store';
 
 export const getPlayers = (state: State) => state.players;
 

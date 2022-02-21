@@ -1,2 +1,2 @@
 export * from './useStore';
-export * from './useSubscription';
+export { default as useSubscription } from './useSubscription';
