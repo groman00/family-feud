@@ -42,6 +42,7 @@ const typeDefs = gql`
 
   type Mutation {
     createGame: Game
+    startGame(token: String): Game
     joinGame(token: String!, playerName: String!): Game
     revealAnswer(answerId: String!, token: String!): Game
     giveStrike(surveyId: String!): Game
@@ -49,6 +50,7 @@ const typeDefs = gql`
   
   type Subscription {
     gameCreated: Game
+    gameStarted: Game
     playerJoined: Game,
     answerRevealed: Game,
     strikeGiven: Game

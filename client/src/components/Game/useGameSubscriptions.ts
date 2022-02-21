@@ -1,5 +1,10 @@
 import { useContext } from 'react';
-import { useOnAnswerRevealedSubscription, useOnPlayerJoinedSubscription, useOnStrikeGivenSubscription } from '../../graphql/generated/types';
+import {
+  useOnAnswerRevealedSubscription,
+  useOnPlayerJoinedSubscription,
+  useOnStrikeGivenSubscription,
+  useOnGameStartedSubscription,
+} from '../../graphql/generated/types';
 import { ActionTypes } from '../../store';
 import { AppContext } from '../../contexts';
 import { useSubscription } from '../../hooks';
@@ -41,6 +46,19 @@ const useGameSubscriptions = () => {
         type: ActionTypes.UpdateSurvey,
         payload: {
           survey: data.strikeGiven?.survey!,
+        },
+      });
+    },
+  });
+
+  useSubscription({
+    subscriptionHook: useOnGameStartedSubscription,
+    key: 'gameStarted',
+    onChange: data => {
+      dispatch({
+        type: ActionTypes.UpdateSurvey,
+        payload: {
+          survey: data.gameStarted?.survey!,
         },
       });
     },

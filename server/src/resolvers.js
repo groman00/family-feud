@@ -47,15 +47,6 @@ module.exports = (models, pubsub) => ({
       await player.setGame(game);
       await player.save();  
       
-      await models.Survey.update(
-        { gameId: game.id},
-        {
-          where: {
-            id: 1
-          }
-        }
-      );
-
       // Testing: Clear all games
       // models.Game.destroy({
       //   where: {},
@@ -66,6 +57,27 @@ module.exports = (models, pubsub) => ({
 
       return game;
     },
+    startGame: async (_, { token }) => {
+      const game = await models.Game.findOne({
+        where: {
+          token
+        }
+      });
+
+      await models.Survey.update(
+        { gameId: game.id },
+        {
+          // Forcing every game to attach survey 1.
+          where: {            
+            id: 1
+          }
+        }
+      );
+
+      pubsub.publish('GAME_STARTED', { gameStarted: game });
+
+      return game;
+    },      
     joinGame: async (_, { token, playerName }) => {
       const game = await models.Game.findOne({
         where: {
@@ -129,6 +141,9 @@ module.exports = (models, pubsub) => ({
   Subscription: {
     gameCreated: {
       subscribe: () => pubsub.asyncIterator(['GAME_CREATED']),
+    },
+    gameStarted: {
+      subscribe: () => pubsub.asyncIterator(['GAME_STARTED']),
     },
     playerJoined: {
       subscribe: () => pubsub.asyncIterator(['PLAYER_JOINED']),

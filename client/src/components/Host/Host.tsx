@@ -1,18 +1,38 @@
 import React, { useContext } from 'react';
-import { GameContext } from '../../contexts/GameContext';
-import { useGiveStrikeMutation, useRevealAnswerMutation } from '../../graphql/generated/types';
+import { GameContext, GameStatus } from '../../contexts/GameContext';
+import { useGiveStrikeMutation, useRevealAnswerMutation, useStartGameMutation } from '../../graphql/generated/types';
 import { useSelector } from '../../hooks';
 import { getGameToken, getPlayers, getSurvey } from '../../store';
 import Answers from '../Answers';
 
-const Lobby: React.FC = () => (
-  <>
-    <h2>Lobby:</h2>
-    <ul>
-      { useSelector(getPlayers)?.map(player => <li key={player.name}>{player.name}</li>)}
-    </ul>
-  </>
-);
+const Lobby: React.FC = () => {
+  const { status } = useContext(GameContext);
+  const [startGame] = useStartGameMutation();
+  const token = useSelector(getGameToken);
+
+  return (
+    <>
+      <h2>Lobby:</h2>
+      <ul>
+        { useSelector(getPlayers)?.map(player => <li key={player.name}>{player.name}</li>)}
+        { status === GameStatus.NotStarted && (
+        <button
+          type="button"
+          onClick={() => {
+            startGame({
+              variables: {
+                token,
+              },
+            });
+          }}
+        >
+          Start Game
+        </button>
+        )}
+      </ul>
+    </>
+  );
+};
 
 const Survey: React.FC = () => {
   const token = useSelector(getGameToken);
@@ -79,7 +99,6 @@ const Survey: React.FC = () => {
 
 const Host: React.FC = () => {
   const token = useSelector(getGameToken);
-
   const survey = useSelector(getSurvey);
 
   return (

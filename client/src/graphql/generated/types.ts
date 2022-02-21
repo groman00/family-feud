@@ -34,9 +34,15 @@ export type Game = {
 export type Mutation = {
   __typename?: 'Mutation';
   createGame?: Maybe<Game>;
+  startGame?: Maybe<Game>;
   joinGame?: Maybe<Game>;
   revealAnswer?: Maybe<Game>;
   giveStrike?: Maybe<Game>;
+};
+
+
+export type MutationStartGameArgs = {
+  token?: Maybe<Scalars['String']>;
 };
 
 
@@ -77,6 +83,7 @@ export type QuerySurveyArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   gameCreated?: Maybe<Game>;
+  gameStarted?: Maybe<Game>;
   playerJoined?: Maybe<Game>;
   answerRevealed?: Maybe<Game>;
   strikeGiven?: Maybe<Game>;
@@ -152,6 +159,17 @@ export type OnGameCreatedSubscription = (
   )> }
 );
 
+export type OnGameStartedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnGameStartedSubscription = (
+  { __typename?: 'Subscription' }
+  & { gameStarted?: Maybe<(
+    { __typename?: 'Game' }
+    & GameFieldsFragment
+  )> }
+);
+
 export type OnPlayerJoinedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -172,6 +190,19 @@ export type RevealAnswerMutationVariables = Exact<{
 export type RevealAnswerMutation = (
   { __typename?: 'Mutation' }
   & { revealAnswer?: Maybe<(
+    { __typename?: 'Game' }
+    & GameFieldsFragment
+  )> }
+);
+
+export type StartGameMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type StartGameMutation = (
+  { __typename?: 'Mutation' }
+  & { startGame?: Maybe<(
     { __typename?: 'Game' }
     & GameFieldsFragment
   )> }
@@ -399,6 +430,35 @@ export function useOnGameCreatedSubscription(baseOptions?: Apollo.SubscriptionHo
       }
 export type OnGameCreatedSubscriptionHookResult = ReturnType<typeof useOnGameCreatedSubscription>;
 export type OnGameCreatedSubscriptionResult = Apollo.SubscriptionResult<OnGameCreatedSubscription>;
+export const OnGameStartedDocument = gql`
+    subscription OnGameStarted {
+  gameStarted {
+    ...GameFields
+  }
+}
+    ${GameFieldsFragmentDoc}`;
+
+/**
+ * __useOnGameStartedSubscription__
+ *
+ * To run a query within a React component, call `useOnGameStartedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnGameStartedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnGameStartedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnGameStartedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnGameStartedSubscription, OnGameStartedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnGameStartedSubscription, OnGameStartedSubscriptionVariables>(OnGameStartedDocument, options);
+      }
+export type OnGameStartedSubscriptionHookResult = ReturnType<typeof useOnGameStartedSubscription>;
+export type OnGameStartedSubscriptionResult = Apollo.SubscriptionResult<OnGameStartedSubscription>;
 export const OnPlayerJoinedDocument = gql`
     subscription OnPlayerJoined {
   playerJoined {
@@ -462,6 +522,39 @@ export function useRevealAnswerMutation(baseOptions?: Apollo.MutationHookOptions
 export type RevealAnswerMutationHookResult = ReturnType<typeof useRevealAnswerMutation>;
 export type RevealAnswerMutationResult = Apollo.MutationResult<RevealAnswerMutation>;
 export type RevealAnswerMutationOptions = Apollo.BaseMutationOptions<RevealAnswerMutation, RevealAnswerMutationVariables>;
+export const StartGameDocument = gql`
+    mutation StartGame($token: String!) {
+  startGame(token: $token) {
+    ...GameFields
+  }
+}
+    ${GameFieldsFragmentDoc}`;
+export type StartGameMutationFn = Apollo.MutationFunction<StartGameMutation, StartGameMutationVariables>;
+
+/**
+ * __useStartGameMutation__
+ *
+ * To run a mutation, you first call `useStartGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startGameMutation, { data, loading, error }] = useStartGameMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useStartGameMutation(baseOptions?: Apollo.MutationHookOptions<StartGameMutation, StartGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartGameMutation, StartGameMutationVariables>(StartGameDocument, options);
+      }
+export type StartGameMutationHookResult = ReturnType<typeof useStartGameMutation>;
+export type StartGameMutationResult = Apollo.MutationResult<StartGameMutation>;
+export type StartGameMutationOptions = Apollo.BaseMutationOptions<StartGameMutation, StartGameMutationVariables>;
 export const SurveysDocument = gql`
     query Surveys {
   surveys {
