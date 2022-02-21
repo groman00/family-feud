@@ -28,7 +28,7 @@ const Status: React.FC = () => {
   return (
     <div>
       <h1>{survey?.title}</h1>
-      <h3>{status === GameStatus.Win ? 'Winner' : 'In progress'}</h3>
+      <h3>{status}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
       <div>
         Strikes:

@@ -28,7 +28,7 @@ const App = () => {
   const value = useMemo(() => ({
     dispatch,
     state,
-  }), []);
+  }), [state]);
 
   return (
     <div className="App">

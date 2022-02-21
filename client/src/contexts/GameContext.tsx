@@ -26,33 +26,35 @@ export const GameProvider: React.FC = ({ children }) => {
     [survey?.answers],
   );
 
-  const status: GameStatus = useMemo(() => {
-    if (!survey) {
-      return GameStatus.NotStarted;
-    }
-    if (strikes > 2) {
-      return GameStatus.Lose;
-    }
-    if (isWinner()) {
-      return GameStatus.Win;
-    }
-    return GameStatus.InProgress;
+  const value = useMemo(() => {
+    const status = (() => {
+      if (!survey) {
+        return GameStatus.NotStarted;
+      }
+
+      if (strikes > 2) {
+        return GameStatus.Lose;
+      }
+
+      if (isWinner()) {
+        return GameStatus.Win;
+      }
+
+      return GameStatus.InProgress;
+    })();
+
+    return {
+      status,
+      hasEnded: [
+        GameStatus.Win,
+        GameStatus.Lose,
+      ].includes(status),
+    };
   }, [
     survey,
     strikes,
     isWinner,
   ]);
-
-  const hasEnded: boolean = useMemo(() => [
-    GameStatus.Win,
-    GameStatus.Lose,
-  ].includes(status), [status]);
-
-  // Todo: Make sure this works.
-  const value = useMemo(() => ({
-    status,
-    hasEnded,
-  }), []);
 
   return (
     <GameContext.Provider value={value}>
