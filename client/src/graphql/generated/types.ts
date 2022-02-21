@@ -29,6 +29,7 @@ export type Game = {
   token?: Maybe<Scalars['String']>;
   players: Array<Player>;
   survey?: Maybe<Survey>;
+  turn?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -225,7 +226,7 @@ export type SurveysQuery = (
 
 export type GameFieldsFragment = (
   { __typename?: 'Game' }
-  & Pick<Game, 'token'>
+  & Pick<Game, 'token' | 'turn'>
   & { survey?: Maybe<(
     { __typename?: 'Survey' }
     & Pick<Survey, 'id' | 'title' | 'totalAnswers' | 'strikes'>
@@ -267,6 +268,7 @@ export const GameFieldsFragmentDoc = gql`
     strikes
   }
   token
+  turn
   players {
     id
     name

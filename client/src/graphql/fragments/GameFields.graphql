@@ -14,6 +14,7 @@ fragment GameFields on Game {
     strikes
   }
   token
+  turn
   players {
     id
     name

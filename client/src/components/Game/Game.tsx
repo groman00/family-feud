@@ -6,7 +6,7 @@ import Player from '../Player';
 import { Game as TGame } from '../../graphql/generated/types';
 import './Game.css';
 import {
-  getCurrentPlayerName, getPlayers, getStrikes, getSurvey,
+  getCurrentPlayerName, getGame, getPlayers, getStrikes, getSurvey,
 } from '../../store';
 import useGameSubscriptions from './useGameSubscriptions';
 
@@ -24,12 +24,18 @@ const Players: React.FC = () => (
 const Status: React.FC = () => {
   const { hasEnded, status } = useContext(GameContext);
   const survey = useSelector(getSurvey);
+  const { turn } = useSelector(getGame);
 
   return (
     <div>
       <h1>{survey?.title}</h1>
       <h3>{status}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
+      <h3>
+        Turn
+        {' '}
+        {turn}
+      </h3>
       <div>
         Strikes:
         {' '}

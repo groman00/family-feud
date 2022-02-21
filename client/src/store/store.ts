@@ -2,7 +2,7 @@ import React from 'react';
 import { Game, Player, Survey } from '../graphql/generated/types';
 
 export interface State {
-  game: Pick<Game, 'token'>,
+  game: Pick<Game, 'token' | 'turn'>,
   currentPlayerName?: string,
   players?: Player[],
   survey?: Survey

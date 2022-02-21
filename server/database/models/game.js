@@ -15,7 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Game.init({
-    token: DataTypes.STRING
+    token: DataTypes.STRING,
+    turn: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Game',

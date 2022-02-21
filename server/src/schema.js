@@ -28,6 +28,7 @@ const typeDefs = gql`
     token: String
     players: [Player!]!
     survey: Survey
+    turn: Int
   }
 
   # type GameResponse {
