@@ -6,7 +6,7 @@ module.exports = (models, pubsub) => ({
       return models.Survey.findAll();
     },
     games: async () => {
-      return models.Game.findAll();
+      return gameService.getAllGames();
     },    
   },
   Survey: {
@@ -37,23 +37,7 @@ module.exports = (models, pubsub) => ({
 
   Mutation:  {
     createGame: async () => {
-      const token = Date.now().toString();       
-      const game = models.Game.build({
-        token,
-      });
-      await game.save();
-
-      const player = models.Player.build({
-        name: 'host',
-      });    
-      await player.setGame(game);
-      await player.save();  
-      
-      // Testing: Clear all games
-      // models.Game.destroy({
-      //   where: {},
-      //   truncate: true
-      // });
+      const game = await gameService.createNewGame();
 
       pubsub.publish('GAME_CREATED', { gameCreated: game });
 
