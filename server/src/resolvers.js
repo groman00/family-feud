@@ -1,3 +1,5 @@
+const { answerService, gameService } = require('./service');
+
 module.exports = (models, pubsub) => ({
   Query: {
     surveys: async () => {
@@ -117,38 +119,9 @@ module.exports = (models, pubsub) => ({
       return game;
     },
     revealAnswer: async (_, { answerId, token }) => {  
-      await models.Answer.update({
-        revealed: true
-      }, {
-        where: {
-          id: answerId
-        }
-      });
+      await answerService.reveal(answerId);
       
-      const game = await models.Game.findOne({
-        where: {
-          token
-        }
-      });   
-      
-      // Todo: Figure out count or findAndCountAll()
-      const players = await models.Player.findAll({
-        where: {
-          gameId: game.id,
-          // Todo: Figure out { ne: value }
-          // name: {
-          //   ne: 'host'
-          // }
-        }
-      });
-
-      const turns = players.filter(p => p.name !== 'host').length;
-      
-      await game.update({
-        turn: game.turn < turns - 1 ? game.turn + 1 : 0
-      });
-
-      await game.save();
+      const game = await gameService.updateTurn(token);
 
       pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
       

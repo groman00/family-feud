@@ -22,7 +22,7 @@ const Players: React.FC = () => {
         { players?.map((player, i) => (
           <li key={player.name}>
             <span>{player.name}</span>
-            { i === turn && <span>(Your Turn)</span> }
+            { i === turn && <span> (Your Turn)</span> }
           </li>
         ))}
       </ul>
