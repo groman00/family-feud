@@ -64,15 +64,37 @@ module.exports = (models, pubsub) => ({
         }
       });
 
-      await models.Survey.update(
-        { gameId: game.id },
-        {
-          // Forcing every game to attach survey 1.
-          where: {            
-            id: 1
-          }
+      const players = await models.Player.findAll({
+        where: {
+          gameId: game.id,
         }
-      );
+      });
+      
+      // Assume 1 player is the host.
+      if (players.length === 1) {
+        throw('No Players')
+        return;
+      }
+
+      const testSurveyId = 1;
+      await models.Survey.update({ 
+        gameId: game.id,
+        strikes: 0,
+      },
+      {
+        // Forcing every game to attach survey 1.
+        where: {            
+          id: testSurveyId
+        }
+      });
+
+      await models.Answer.update({
+        revealed: false
+      }, {
+        where: {            
+          surveyId: testSurveyId
+        }
+      });
 
       pubsub.publish('GAME_STARTED', { gameStarted: game });
 
@@ -107,7 +129,26 @@ module.exports = (models, pubsub) => ({
         where: {
           token
         }
-      });      
+      });   
+      
+      // Todo: Figure out count or findAndCountAll()
+      const players = await models.Player.findAll({
+        where: {
+          gameId: game.id,
+          // Todo: Figure out { ne: value }
+          // name: {
+          //   ne: 'host'
+          // }
+        }
+      });
+
+      const turns = players.filter(p => p.name !== 'host').length;
+      
+      await game.update({
+        turn: game.turn < turns - 1 ? game.turn + 1 : 0
+      });
+
+      await game.save();
 
       pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
       

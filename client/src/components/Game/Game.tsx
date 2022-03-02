@@ -12,30 +12,33 @@ import useGameSubscriptions from './useGameSubscriptions';
 
 const CurrentPlayer: React.FC = () => (useSelector(getCurrentPlayerName) ? <Player /> : <Host />);
 
-const Players: React.FC = () => (
-  <div>
-    <h2>Players:</h2>
-    <ul>
-      { useSelector(getPlayers)?.map(player => <li key={player.name}>{player.name}</li>)}
-    </ul>
-  </div>
-);
+const Players: React.FC = () => {
+  const { turn } = useSelector(getGame);
+  const players = useSelector(getPlayers)?.filter(p => p.name !== 'host');
+  return (
+    <div>
+      <h2>Players:</h2>
+      <ul>
+        { players?.map((player, i) => (
+          <li key={player.name}>
+            <span>{player.name}</span>
+            { i === turn && <span>(Your Turn)</span> }
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 const Status: React.FC = () => {
   const { hasEnded, status } = useContext(GameContext);
   const survey = useSelector(getSurvey);
-  const { turn } = useSelector(getGame);
 
   return (
     <div>
       <h1>{survey?.title}</h1>
       <h3>{status}</h3>
       <h3>{hasEnded && 'Round Over'}</h3>
-      <h3>
-        Turn
-        {' '}
-        {turn}
-      </h3>
       <div>
         Strikes:
         {' '}
