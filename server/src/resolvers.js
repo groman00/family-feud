@@ -1,4 +1,4 @@
-const { answerService, gameService } = require('./service');
+const { answerService, gameService, playerService } = require('./service');
 
 module.exports = (models, pubsub) => ({
   Query: {
@@ -44,17 +44,9 @@ module.exports = (models, pubsub) => ({
       return game;
     },
     startGame: async (_, { token }) => {
-      const game = await models.Game.findOne({
-        where: {
-          token
-        }
-      });
+      const game = await gameService.getByToken(token);
 
-      const players = await models.Player.findAll({
-        where: {
-          gameId: game.id,
-        }
-      });
+      const players = await playerService.getPlayersByGameId(game.id);
       
       // Assume 1 player is the host.
       if (players.length === 1) {

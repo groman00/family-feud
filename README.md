@@ -27,7 +27,6 @@ https://mstiescott.neocities.org/feud16.html
 
 ### Todos
 
-- Changing turns
 - Store players and hosts separately
 - Buzzing in
 - Random survey selecting

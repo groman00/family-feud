@@ -1,29 +1,28 @@
-const models = require('../../database/models');
+const { gameRepository } = require('../repository');
+const models = require('../../database/models'); // Todo: Remove models.
 
 class GameService {
 
   getAllGames() {
-    return models.Game.findAll();
+    return gameRepository.findAll();
   }
 
   async createNewGame() {
-    const token = Date.now().toString();       
-    const game = models.Game.build({
-      token,
+    const game = await gameRepository.createWithFields({
+      token: Date.now().toString(),
     });
-    await game.save();
-
     const player = models.Player.build({
       name: 'host',
     });    
+
     await player.setGame(game);
     await player.save();  
     
-    // Testing: Clear all games
-    // models.Game.destroy({
-    //   where: {},
-    //   truncate: true
-    // });
+    return game;
+  }
+
+  getByToken(token) {
+    return gameRepository.findOneByFields({ token });
   }
 
   async updateTurn(token) {
