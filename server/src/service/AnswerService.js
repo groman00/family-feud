@@ -3,12 +3,22 @@ const models = require('../../database/models');
 
 class AnswerService {
 
-  reveal (id) {
+  reveal(id, revealed = true) {
     return models.Answer.update({
-      revealed: true
+      revealed
     }, {
       where: {
         id
+      }
+    });    
+  }
+
+  revealBySurveyId(surveyId, revealed = true) { 
+    return models.Answer.update({
+      revealed
+    }, {
+      where: {            
+        surveyId
       }
     });    
   }

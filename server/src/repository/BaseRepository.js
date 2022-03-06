@@ -1,8 +1,13 @@
-// Todo Make this an abstract class or interface.
 class BaseRepository {
 
   constructor(model) {
     this.model = model;
+  }
+
+  async createWithFields(fields) {
+    const model = await this.model.build(fields);    
+    await model.save();
+    return model;    
   }
 
   findAllByFields(fields) {
@@ -19,12 +24,6 @@ class BaseRepository {
 
   findAll() {
     return this.model.findAll();
-  }
-  
-  async createWithFields(fields) {
-    const model = await this.model.build(fields);    
-    await model.save();
-    return model;    
   }
 }
 

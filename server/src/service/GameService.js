@@ -1,5 +1,4 @@
-const { gameRepository } = require('../repository');
-const models = require('../../database/models'); // Todo: Remove models.
+const { gameRepository, playerRepository } = require('../repository');
 
 class GameService {
 
@@ -11,12 +10,12 @@ class GameService {
     const game = await gameRepository.createWithFields({
       token: Date.now().toString(),
     });
-    const player = models.Player.build({
-      name: 'host',
-    });    
 
-    await player.setGame(game);
-    await player.save();  
+    // Create Host
+    await playerRepository.createWithFields({
+      name: 'host',
+      gameId: game.id
+    });
     
     return game;
   }
@@ -25,23 +24,15 @@ class GameService {
     return gameRepository.findOneByFields({ token });
   }
 
+  getById(id) {
+    return gameRepository.findOneByFields({ id });
+  }
+
   async updateTurn(token) {
-    const game = await models.Game.findOne({
-      where: {
-        token
-      }
-    });  
+    const game = await gameRepository.findOneByFields({ token });
 
     // Todo: Figure out count or findAndCountAll()
-    const players = await models.Player.findAll({
-      where: {
-        gameId: game.id,
-        // Todo: Figure out { ne: value }
-        // name: {
-        //   ne: 'host'
-        // }
-      }
-    });
+    const players = await playerRepository.findAllByFields({ gameId: game.id });
 
     const turns = players.filter(p => p.name !== 'host').length;
     

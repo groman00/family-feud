@@ -20,11 +20,7 @@ module.exports = (models, pubsub) => ({
   },
   Game: {
     players: async (game) => {
-      return models.Player.findAll({
-        where: {
-          gameId: game.id
-        }
-      });
+      return playerService.getPlayersByGameId(game.id);
     },   
     survey: async (game) => {
       return models.Survey.findOne({
@@ -45,7 +41,6 @@ module.exports = (models, pubsub) => ({
     },
     startGame: async (_, { token }) => {
       const game = await gameService.getByToken(token);
-
       const players = await playerService.getPlayersByGameId(game.id);
       
       // Assume 1 player is the host.
@@ -66,29 +61,16 @@ module.exports = (models, pubsub) => ({
         }
       });
 
-      await models.Answer.update({
-        revealed: false
-      }, {
-        where: {            
-          surveyId: testSurveyId
-        }
-      });
-
+      answerService.revealBySurveyId(testSurveyId, false);
+      
       pubsub.publish('GAME_STARTED', { gameStarted: game });
 
       return game;
     },      
     joinGame: async (_, { token, playerName }) => {
-      const game = await models.Game.findOne({
-        where: {
-          token
-        }
-      });
-      const player = models.Player.build({
-        name: playerName,
-      });    
-      await player.setGame(game);
-      await player.save();   
+      const game = await gameService.getByToken(token);
+      
+      await playerService.addPlayerToGame(playerName, game.id)
         
       pubsub.publish('PLAYER_JOINED', { playerJoined: game });
       
@@ -117,11 +99,7 @@ module.exports = (models, pubsub) => ({
         await survey.save();
       }
       
-      const game = await models.Game.findOne({
-        where: {
-          id: survey.gameId
-        }
-      });      
+      const game = await gameService.getById(survey.gameId);      
 
       pubsub.publish('STRIKE_GIVEN', { strikeGiven: game });      
       
