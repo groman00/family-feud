@@ -66,21 +66,5 @@ module.exports = {
       return game;
     }      
   },
-  Subscription: {
-    gameCreated: {
-      subscribe: () => pubSubService.subscribe('GAME_CREATED'),
-    },
-    gameStarted: {
-      subscribe: () => pubSubService.subscribe('GAME_STARTED'),
-    },
-    playerJoined: {
-      subscribe: () => pubSubService.subscribe('PLAYER_JOINED'),
-    },   
-    answerRevealed: {
-      subscribe: () => pubSubService.subscribe('ANSWER_REVEALED'),
-    },   
-    strikeGiven: {
-      subscribe: () => pubSubService.subscribe('STRIKE_GIVEN'),
-    },            
-  },  
+  Subscription: pubSubService.toSubscriptions()
 };

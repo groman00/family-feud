@@ -9,6 +9,7 @@ const { execute, subscribe } = require('graphql');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 
 async function startApolloServer() {
+  console.log(resolvers)
   const app = express();
   const httpServer = http.createServer(app);
   const schema = makeExecutableSchema({ typeDefs, resolvers });
