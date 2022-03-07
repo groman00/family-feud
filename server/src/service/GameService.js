@@ -1,4 +1,7 @@
-const { gameRepository, playerRepository } = require('../repository');
+const { 
+  gameRepository, 
+  playerRepository 
+} = require('../repository');
 
 class GameService {
 

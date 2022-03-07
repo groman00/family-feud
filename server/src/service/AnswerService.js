@@ -1,34 +1,17 @@
-// Todo: AnswerRepository
-const models = require('../../database/models');
+const { answerRepository } = require('../repository');
 
 class AnswerService {
 
   reveal(id, revealed = true) {
-    return models.Answer.update({
-      revealed
-    }, {
-      where: {
-        id
-      }
-    });    
+    return answerRepository.updateWithFields({ revealed }, { id });
   }
 
   revealBySurveyId(surveyId, revealed = true) {
-    return models.Answer.update({
-      revealed
-    }, {
-      where: {            
-        surveyId
-      }
-    });    
+    return answerRepository.updateWithFields({ revealed }, { surveyId });
   }
 
   getBySurveyId(surveyId) {
-    return models.Answer.findAll({
-      where: {
-        surveyId
-      }
-    });    
+    return answerRepository.findAllByFields({ surveyId });
   }
 }
 

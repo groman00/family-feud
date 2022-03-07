@@ -1,11 +1,9 @@
-const answerRepository = require('./AnswerRepository');
-const gameRepository = require('./GameRepository');
-const playerRepository = require('./PlayerRepository');
-const surveyRepository = require('./SurveyRepository');
+const BaseRepository = require("./BaseRepository");
+const models = require('../../database/models');
 
 module.exports = {
-  answerRepository,
-  gameRepository,
-  playerRepository,
-  surveyRepository,
+  answerRepository: new BaseRepository(models.Answer),
+  gameRepository: new BaseRepository(models.Game),
+  playerRepository: new BaseRepository(models.Player),
+  surveyRepository: new BaseRepository(models.Survey),
 };
