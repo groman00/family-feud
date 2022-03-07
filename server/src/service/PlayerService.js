@@ -7,6 +7,14 @@ class PlayerService {
       name,
     });
   }
+
+  createHost(gameId) {
+    return playerRepository.createWithFields({
+      name: 'host',
+      gameId,
+    });
+  }
+
   getPlayersByGameId(gameId) {
     return playerRepository.findAllByFields({ gameId });
   }

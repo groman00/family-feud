@@ -1,3 +1,4 @@
+const { PubSub } = require('graphql-subscriptions');
 const { 
   answerService, 
   gameService, 
@@ -5,27 +6,24 @@ const {
   surveyService
 } = require('./service');
 
-module.exports = (pubsub) => ({
+const pubsub = new PubSub();
+
+module.exports = {
   Query: {
-    surveys: async () => {
-      return surveyService.findAll();
-    },
-    games: async () => {
-      return gameService.getAllGames();
-    },    
+    surveys: async () => 
+      surveyService.findAll(),
+    games: async () => 
+      gameService.getAllGames(),    
   },
   Survey: {
-    answers: async (survey) => {
-      return answerService.getBySurveyId(survey.id)
-    },  
+    answers: async (survey) => 
+      answerService.getBySurveyId(survey.id),  
   },
   Game: {
-    players: async (game) => {
-      return playerService.getPlayersByGameId(game.id);
-    },   
-    survey: async (game) => {
-      return surveyService.getByGameId(game.id);
-    },  
+    players: async (game) => 
+      playerService.getPlayersByGameId(game.id),   
+    survey: async (game) => 
+      surveyService.getByGameId(game.id),  
   },
 
   Mutation:  {
@@ -37,18 +35,7 @@ module.exports = (pubsub) => ({
       return game;
     },
     startGame: async (_, { token }) => {
-      const game = await gameService.getByToken(token);
-      const players = await playerService.getPlayersByGameId(game.id);
-      
-      // Assume 1 player is the host.
-      if (players.length === 1) {
-        throw('No Players')
-      }
-
-      const testSurveyId = 1;
-
-      await surveyService.setGame(testSurveyId, game.id)
-      await answerService.revealBySurveyId(testSurveyId, false);
+      const game = await gameService.startGame(token);
       
       pubsub.publish('GAME_STARTED', { gameStarted: game });
 
@@ -106,4 +93,4 @@ module.exports = (pubsub) => ({
       subscribe: () => pubsub.asyncIterator(['STRIKE_GIVEN']),
     },            
   },  
-});
+};
