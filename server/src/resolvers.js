@@ -60,15 +60,7 @@ module.exports = {
       return game;
     },  
     giveStrike: async (_, { surveyId }) => {
-      const survey = await surveyService.getById(surveyId);
-
-      if (survey.strikes < 3) {
-        await survey.update({
-          strikes: survey.strikes + 1
-        });
-        await survey.save();
-      }
-      
+      const survey = await surveyService.giveStrike(surveyId)
       const game = await gameService.getById(survey.gameId);      
 
       pubsub.publish('STRIKE_GIVEN', { strikeGiven: game });      
