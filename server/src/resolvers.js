@@ -1,12 +1,10 @@
-const { PubSub } = require('graphql-subscriptions');
 const { 
   answerService, 
   gameService, 
-  playerService, 
+  playerService,
+  pubSubService, 
   surveyService
 } = require('./service');
-
-const pubsub = new PubSub();
 
 module.exports = {
   Query: {
@@ -30,14 +28,14 @@ module.exports = {
     createGame: async () => {
       const game = await gameService.createNewGame();
 
-      pubsub.publish('GAME_CREATED', { gameCreated: game });
+      pubSubService.publish('GAME_CREATED', { gameCreated: game });
 
       return game;
     },
     startGame: async (_, { token }) => {
       const game = await gameService.startGame(token);
       
-      pubsub.publish('GAME_STARTED', { gameStarted: game });
+      pubSubService.publish('GAME_STARTED', { gameStarted: game });
 
       return game;
     },      
@@ -46,7 +44,7 @@ module.exports = {
       
       await playerService.addPlayerToGame(playerName, game.id)
         
-      pubsub.publish('PLAYER_JOINED', { playerJoined: game });
+      pubSubService.publish('PLAYER_JOINED', { playerJoined: game });
       
       return game;
     },
@@ -55,7 +53,7 @@ module.exports = {
       
       const game = await gameService.updateTurn(token);
 
-      pubsub.publish('ANSWER_REVEALED', { answerRevealed: game });
+      pubSubService.publish('ANSWER_REVEALED', { answerRevealed: game });
       
       return game;
     },  
@@ -63,26 +61,26 @@ module.exports = {
       const survey = await surveyService.giveStrike(surveyId)
       const game = await gameService.getById(survey.gameId);      
 
-      pubsub.publish('STRIKE_GIVEN', { strikeGiven: game });      
+      pubSubService.publish('STRIKE_GIVEN', { strikeGiven: game });      
       
       return game;
     }      
   },
   Subscription: {
     gameCreated: {
-      subscribe: () => pubsub.asyncIterator(['GAME_CREATED']),
+      subscribe: () => pubSubService.subscribe('GAME_CREATED'),
     },
     gameStarted: {
-      subscribe: () => pubsub.asyncIterator(['GAME_STARTED']),
+      subscribe: () => pubSubService.subscribe('GAME_STARTED'),
     },
     playerJoined: {
-      subscribe: () => pubsub.asyncIterator(['PLAYER_JOINED']),
+      subscribe: () => pubSubService.subscribe('PLAYER_JOINED'),
     },   
     answerRevealed: {
-      subscribe: () => pubsub.asyncIterator(['ANSWER_REVEALED']),
+      subscribe: () => pubSubService.subscribe('ANSWER_REVEALED'),
     },   
     strikeGiven: {
-      subscribe: () => pubsub.asyncIterator(['STRIKE_GIVEN']),
+      subscribe: () => pubSubService.subscribe('STRIKE_GIVEN'),
     },            
   },  
 };
