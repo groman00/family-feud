@@ -1,5 +1,6 @@
 const { PubSub } = require('graphql-subscriptions');
 
+// Todo: Use Enum
 const events = {
   gameCreated: 'GAME_CREATED',
   gameStarted: 'GAME_STARTED',
@@ -12,8 +13,8 @@ const pubsub = new PubSub();
 
 class PubSubService {
 
-  publish(event, obj) {
-    pubsub.publish(event, obj);
+  publishGameEvent(eventKey, game) {
+    pubsub.publish(events[eventKey], { [eventKey]: game });
   }
 
   toSubscriptions() {

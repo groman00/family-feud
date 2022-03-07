@@ -28,14 +28,14 @@ module.exports = {
     createGame: async () => {
       const game = await gameService.createNewGame();
 
-      pubSubService.publish('GAME_CREATED', { gameCreated: game });
+      pubSubService.publishGameEvent('gameCreated', game);
 
       return game;
     },
     startGame: async (_, { token }) => {
       const game = await gameService.startGame(token);
       
-      pubSubService.publish('GAME_STARTED', { gameStarted: game });
+      pubSubService.publishGameEvent('gameStarted', game);
 
       return game;
     },      
@@ -44,7 +44,7 @@ module.exports = {
       
       await playerService.addPlayerToGame(playerName, game.id)
         
-      pubSubService.publish('PLAYER_JOINED', { playerJoined: game });
+      pubSubService.publishGameEvent('playerJoined', game);
       
       return game;
     },
@@ -53,7 +53,7 @@ module.exports = {
       
       const game = await gameService.updateTurn(token);
 
-      pubSubService.publish('ANSWER_REVEALED', { answerRevealed: game });
+      pubSubService.publishGameEvent('answerRevealed', game);
       
       return game;
     },  
@@ -61,7 +61,7 @@ module.exports = {
       const survey = await surveyService.giveStrike(surveyId)
       const game = await gameService.getById(survey.gameId);      
 
-      pubSubService.publish('STRIKE_GIVEN', { strikeGiven: game });      
+      pubSubService.publishGameEvent('strikeGiven', game);
       
       return game;
     }      
