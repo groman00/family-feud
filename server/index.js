@@ -2,7 +2,6 @@ const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const typeDefs = require('./src/schema');
 const toResolvers = require('./src/resolvers');
-const models = require('./database/models')
 const express = require('express');
 const http = require('http');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
@@ -13,7 +12,7 @@ const { PubSub } = require('graphql-subscriptions');
 async function startApolloServer() {
   const app = express();
   const httpServer = http.createServer(app);
-  const resolvers = toResolvers(models, new PubSub())
+  const resolvers = toResolvers(new PubSub())
   const schema = makeExecutableSchema({ typeDefs, resolvers });
   const subscriptionServer = SubscriptionServer.create({
     schema,

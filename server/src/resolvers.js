@@ -1,9 +1,14 @@
-const { answerService, gameService, playerService } = require('./service');
+const { 
+  answerService, 
+  gameService, 
+  playerService, 
+  surveyService
+} = require('./service');
 
-module.exports = (models, pubsub) => ({
+module.exports = (pubsub) => ({
   Query: {
     surveys: async () => {
-      return models.Survey.findAll();
+      return surveyService.findAll();
     },
     games: async () => {
       return gameService.getAllGames();
@@ -11,11 +16,7 @@ module.exports = (models, pubsub) => ({
   },
   Survey: {
     answers: async (survey) => {
-      return models.Answer.findAll({
-        where: {
-          surveyId: survey.id
-        }
-      });
+      return answerService.getBySurveyId(survey.id)
     },  
   },
   Game: {
@@ -23,11 +24,7 @@ module.exports = (models, pubsub) => ({
       return playerService.getPlayersByGameId(game.id);
     },   
     survey: async (game) => {
-      return models.Survey.findOne({
-        where: {
-          gameId: game.id
-        }
-      });
+      return surveyService.getByGameId(game.id);
     },  
   },
 
@@ -46,22 +43,12 @@ module.exports = (models, pubsub) => ({
       // Assume 1 player is the host.
       if (players.length === 1) {
         throw('No Players')
-        return;
       }
 
       const testSurveyId = 1;
-      await models.Survey.update({ 
-        gameId: game.id,
-        strikes: 0,
-      },
-      {
-        // Forcing every game to attach survey 1.
-        where: {            
-          id: testSurveyId
-        }
-      });
 
-      answerService.revealBySurveyId(testSurveyId, false);
+      await surveyService.setGame(testSurveyId, game.id)
+      await answerService.revealBySurveyId(testSurveyId, false);
       
       pubsub.publish('GAME_STARTED', { gameStarted: game });
 
@@ -86,11 +73,7 @@ module.exports = (models, pubsub) => ({
       return game;
     },  
     giveStrike: async (_, { surveyId }) => {
-      const survey = await models.Survey.findOne({
-        where: {
-          id: surveyId
-        }
-      });
+      const survey = await surveyService.getById(surveyId);
 
       if (survey.strikes < 3) {
         await survey.update({

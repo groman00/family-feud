@@ -25,6 +25,12 @@ class BaseRepository {
   findAll() {
     return this.model.findAll();
   }
+
+  updateWithFields(update, fields) {
+    return this.model.update(update, {
+      where: fields,
+    });    
+  }
 }
 
 module.exports = BaseRepository;

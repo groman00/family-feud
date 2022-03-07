@@ -13,11 +13,19 @@ class AnswerService {
     });    
   }
 
-  revealBySurveyId(surveyId, revealed = true) { 
+  revealBySurveyId(surveyId, revealed = true) {
     return models.Answer.update({
       revealed
     }, {
       where: {            
+        surveyId
+      }
+    });    
+  }
+
+  getBySurveyId(surveyId) {
+    return models.Answer.findAll({
+      where: {
         surveyId
       }
     });    
