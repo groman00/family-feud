@@ -17,15 +17,15 @@ class PubSubService {
   }
 
   toSubscriptions() {
-    const subscriptions = {};
+    return Object
+      .keys(events)
+      .reduce((accumulator, eventKey) => ({
+        ...accumulator,
+        [eventKey]: {
+          subscribe: () => pubsub.asyncIterator([events[eventKey]]),
+        }
+      }), {});
 
-    Object.keys(events).forEach(event => {
-      subscriptions[event] = {
-        subscribe: () => pubsub.asyncIterator([events[event]]),
-      }
-    });
-
-    return subscriptions;
   }
 }
 
