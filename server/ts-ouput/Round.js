@@ -1,23 +1,21 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartedRound = exports.Round = void 0;
 ;
-// Where does this go?
-// attachSurvey
-var Round = /** @class */ (function () {
-    function Round(survey) {
-        this.startRound = function () {
-            return new StartedRound();
+class Round {
+    constructor(survey) {
+        this.startRound = (buzzingPlayers) => {
+            return new StartedRound(this.survey, buzzingPlayers);
         };
         this.survey = survey;
     }
-    return Round;
-}());
+}
 exports.Round = Round;
-var StartedRound = /** @class */ (function () {
-    function StartedRound() {
+class StartedRound {
+    constructor(survey, buzzingPlayers) {
+        this.survey = survey;
+        this.buzzingPlayers = buzzingPlayers;
     }
-    return StartedRound;
-}());
+}
 exports.StartedRound = StartedRound;
 ;

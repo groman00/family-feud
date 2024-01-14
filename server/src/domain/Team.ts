@@ -1,9 +1,11 @@
-import { Player } from "./NamedEntity";
+import { NamedEntity, Player } from "./NamedEntity";
 
-export type Team = {
-  players: Player[],
+export type Team = NamedEntity & {
+  players: Player[];
 }
 
 export type PlayingTeam = Team;
 
 export type IdleTeam = Team;
+
+export type Teams = Team | PlayingTeam | IdleTeam;

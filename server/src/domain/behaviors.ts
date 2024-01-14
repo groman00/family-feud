@@ -1,15 +1,15 @@
-import { Player } from "./NamedEntity";
 import { PlayingRound, StartedRound } from "./Round";
-// import { RevealedSurvey } from "./Survey";
+import { RevealedSurvey } from "./Survey";
 import { Team } from "./Team";
+import { TeamPlayer } from "./TeamPlayer";
 import { Guess } from "./aliases";
 import { GuessResponse } from "./responses";
 
 export type StartRound = (teams: Team[]) => StartedRound;
 
-// export type AttachSurvey = () => RevealedSurvey;
+export type RevealSurvey = () => RevealedSurvey;
 
-export type BuzzIn = (player: Player) => GuessResponse;
+export type BuzzIn = (player: TeamPlayer) => GuessResponse;
 
 export type PassOrPlay = (team: Team) => PlayingRound;
 

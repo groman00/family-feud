@@ -1,22 +1,18 @@
 import { Player } from "./NamedEntity";
 import { Survey } from "./Survey";
 import { PlayingTeam } from "./Team";
-import { TeamPlayer } from "./TeamPlayer";
+import { BuzzingPlayers, TeamPlayer } from "./TeamPlayer";
 import { Strikes } from "./aliases";
 import { BuzzIn, GuessAnswer, PassOrPlay, StartRound, StealRound } from "./behaviors";
 
 export interface RoundInterface {
   survey: Survey;
-  // startRound: StartRound;
 };
-
-// Where does this go?
-// attachSurvey
 
 export class Round implements RoundInterface {
   survey: Survey;
-  startRound = () => {
-    return new StartedRound();
+  startRound = (buzzingPlayers: BuzzingPlayers) => {
+    return new StartedRound(this.survey, buzzingPlayers);
   }
   constructor(survey: Survey) {
     this.survey = survey;
@@ -25,9 +21,13 @@ export class Round implements RoundInterface {
 
 export class StartedRound implements RoundInterface {
   survey: Survey;
-  buzzingPlayers: [TeamPlayer, TeamPlayer];
+  buzzingPlayers: BuzzingPlayers;
   buzzIn: BuzzIn;
   passOrPlay: PassOrPlay;
+  constructor(survey: Survey, buzzingPlayers: BuzzingPlayers) {
+    this.survey = survey;
+    this.buzzingPlayers = buzzingPlayers
+  }
 };
 
 export type PlayingRound = Round & {

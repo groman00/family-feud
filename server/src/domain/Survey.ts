@@ -1,26 +1,34 @@
 import { Answer, Answers, RevealedAnswer } from "./Answer";
 import { Team } from "./Team";
-// import { RevealSurvey } from "./behaviors";
+import { RevealSurvey } from "./behaviors";
 
 export interface SurveyInterface {
   answers: Answers;
-  value?: string;
-  // reveal: RevealSurvey;
 };
 
-// export type RevealedSurvey = TSurvey {}
 
 export class Survey implements SurveyInterface {
+  #value: string;
   answers: Answers;
-  // value: string;
+  reveal: RevealSurvey = () => ({
+    answers: this.answers,
+    value: this.#value,
+  })
   constructor(answers: Answers) {
     this.answers = answers;
+    this.#value = 'Test Survey';
   }
+}
+
+export type RevealedSurvey = SurveyInterface & {
+  value: string;
 }
 
 export class CompletedSurvey extends Survey {
   // winningTeam: Team;
 };
+
+
 
 
 // class HiddenSurvey extends Survey {

@@ -5,3 +5,5 @@ export type TeamPlayer = {
   player: Player;
   team: Team;
 }
+
+export type BuzzingPlayers = [TeamPlayer, TeamPlayer];

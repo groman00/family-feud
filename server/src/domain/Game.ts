@@ -1,9 +1,9 @@
 import { Host } from "./NamedEntity";
 import { Round } from "./Round";
-import { IdleTeam, PlayingTeam, Team } from "./Team";
+import { IdleTeam, PlayingTeam, Team, Teams } from "./Team";
 
 export type Game = {
-  rounds: Round[],
+  rounds: Round[], // This should be a triple
   host: Host,
-  teams: Array<Team | PlayingTeam | IdleTeam>
+  teams: [Teams, Teams]
 };
