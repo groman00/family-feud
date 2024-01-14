@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "ts-ouput"
-  }
+  },
+  "files": [
+    "./src/domain/domain-test.ts",
+  ]
 }

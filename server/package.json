@@ -11,7 +11,8 @@
     "seed": "cd ./database && sequelize-cli db:seed:all",
     "seed:undo": "cd ./database && sequelize-cli db:seed:undo --seed",
     "migration:generate": "cd ./database && sequelize-cli migration:generate --name migration-skeleton",
-    "model:generate": "cd ./database && sequelize-cli model:generate"
+    "model:generate": "cd ./database && sequelize-cli model:generate",
+    "tsc": "tsc --watch"
   },
   "author": "",
   "license": "ISC",

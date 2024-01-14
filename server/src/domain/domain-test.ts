@@ -14,16 +14,20 @@ const createRound = (survey: Survey) => {
 };
 
 const createGame = (): Game => {
-  const host: Host = {
-    name: 'Steve Harvey'
-  };  
   const survey = createSurvey();
   const round = createRound(survey);
-  const rounds = []
 
   return {
-    host,
-    rounds,
+    host: {
+      name: 'Steve Harvey'
+    },
+    rounds: [
+      round,
+    ],
     teams: [],
   };
 }
+
+console.log(
+  createGame()
+);
