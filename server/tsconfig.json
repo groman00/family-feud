@@ -1,0 +1,5 @@
+{
+  "compilerOptions": {
+    "outDir": "ts-ouput"
+  }
+}
