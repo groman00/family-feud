@@ -6,7 +6,6 @@ export interface SurveyInterface {
   answers: Answers;
 };
 
-
 export class Survey implements SurveyInterface {
   #value: string;
   answers: Answers;
@@ -28,15 +27,4 @@ export class CompletedSurvey extends Survey {
   // winningTeam: Team;
 };
 
-
-
-
-// class HiddenSurvey extends Survey {
-//   reveal: RevealSurvey = () => {
-//     return new RevealedSurvey()
-//   }
-// }
-
-// export class RevealedSurvey extends Survey {
-//   // constructor ()
-// }
+export type Surveys = Survey | RevealedSurvey | CompletedSurvey;

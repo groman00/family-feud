@@ -18,11 +18,3 @@ class CompletedSurvey extends Survey {
 }
 exports.CompletedSurvey = CompletedSurvey;
 ;
-// class HiddenSurvey extends Survey {
-//   reveal: RevealSurvey = () => {
-//     return new RevealedSurvey()
-//   }
-// }
-// export class RevealedSurvey extends Survey {
-//   // constructor ()
-// }

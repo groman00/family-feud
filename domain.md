@@ -22,7 +22,7 @@
 
 ### Starting a Round
 
-- A **New Round** starts with 1 **Player** from each team.
+- A new **Round** starts with 1 **Player** from each team.
 - When the **Host** reveals the Survey, the **Playing Team** is decided by **Players** **Buzzing** in to **Guess** an **Answer**.
 - If a **Player** **Buzzes** in first and their **Guess** is a **Bad Guess**, the other player can **Guess**
 - If a **Player** **Buzzes** in first and their **Guess** is a **Good Guess**

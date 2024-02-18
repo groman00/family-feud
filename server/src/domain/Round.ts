@@ -1,30 +1,40 @@
+import { BadGuess } from "./Guess";
 import { Player } from "./NamedEntity";
-import { Survey } from "./Survey";
+import { RevealedSurvey, Survey, Surveys } from "./Survey";
 import { PlayingTeam } from "./Team";
 import { BuzzingPlayers, TeamPlayer } from "./TeamPlayer";
 import { Strikes } from "./aliases";
 import { BuzzIn, GuessAnswer, PassOrPlay, StartRound, StealRound } from "./behaviors";
 
 export interface RoundInterface {
-  survey: Survey;
+  survey: Surveys;
+  // Do we need buzzing players?
+  buzzingPlayers: BuzzingPlayers;
 };
 
 export class Round implements RoundInterface {
   survey: Survey;
-  startRound = (buzzingPlayers: BuzzingPlayers) => {
-    return new StartedRound(this.survey, buzzingPlayers);
+  buzzingPlayers: BuzzingPlayers;
+  startRound = () => {
+    const revealedSurvey = this.survey.reveal();
+    return new StartedRound(revealedSurvey, this.buzzingPlayers);
   }
-  constructor(survey: Survey) {
+  constructor(survey: Survey, buzzingPlayers: BuzzingPlayers) {
     this.survey = survey;
+    this.buzzingPlayers = buzzingPlayers;
   }
 }
 
 export class StartedRound implements RoundInterface {
-  survey: Survey;
+  survey: RevealedSurvey;
   buzzingPlayers: BuzzingPlayers;
-  buzzIn: BuzzIn;
-  passOrPlay: PassOrPlay;
-  constructor(survey: Survey, buzzingPlayers: BuzzingPlayers) {
+  buzzIn: BuzzIn = (player, guess) => ({
+    response: BadGuess
+    // playingRound: PlayingRound;
+    // survey: CompletedSurvey | Survey;
+  });
+  // passOrPlay: PassOrPlay;
+  constructor(survey: RevealedSurvey, buzzingPlayers: BuzzingPlayers) {
     this.survey = survey;
     this.buzzingPlayers = buzzingPlayers
   }

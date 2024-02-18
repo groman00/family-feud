@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {  
       Game.hasMany(models.Player);        
       Game.hasMany(models.Survey);  
+      Game.hasMany(models.Round);  
     }
   };
   Game.init({

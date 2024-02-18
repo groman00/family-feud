@@ -1,17 +1,18 @@
 import { Game } from './Game';
+import { BadGuess } from './Guess';
 import { Host, Player } from './NamedEntity';
 import { Round } from './Round';
 import { Survey } from './Survey';
 import { Team } from './Team';
-import { TeamPlayer } from './TeamPlayer';
+import { BuzzingPlayers, TeamPlayer } from './TeamPlayer';
 
 const createSurvey = () => {
   const answers = [{ answerRanking: 0 }, { answerRanking: 1 }];
   return new Survey(answers);
 };
 
-const createRound = (survey: Survey) => {
-  return new Round(survey);
+const createRound = (survey: Survey, buzzingPlayers: BuzzingPlayers) => {
+  return new Round(survey, buzzingPlayers);
 };
 
 const createHost = () => ({
@@ -36,15 +37,26 @@ const toTeamPlayer = (team: Team, player: Player): TeamPlayer => ({
 
 const createGame = (): Game => {
   const survey = createSurvey();
-  const round = createRound(survey);
+  const team1 = createTeam('Team 1');
+  const team2 = createTeam('Team 2');
+  // const [team1FirstPlayer] = team1.players;
+  // const [team2FirstPlayer] = team2.players;
+  const team1Player = toTeamPlayer(team1, team1.players[0])
+  const team2Player = toTeamPlayer(team2, team2.players[0])
+
+  const round = createRound(
+    survey, 
+    [team1Player, team2Player]
+  );
+
   return {
     host: createHost(),
     rounds: [
       round,
     ],
     teams: [
-      createTeam('Team 1'),
-      createTeam('Team 2')
+      team1,
+      team2,
     ],
   };
 }
@@ -60,26 +72,34 @@ const createGame = (): Game => {
 
   const { rounds, teams } = game;
   const [currentRound] = rounds;
-  const [team1, team2] = teams;
-  const [team1FirstPlayer] = team1.players;
-  const [team2FirstPlayer] = team2.players;
-  const team1Player = toTeamPlayer(team1, team1.players[0])
-  const team2Player = toTeamPlayer(team2, team2.players[0])
+  // const [currentRound] = rounds;
+  // const [team1, team2] = teams;
+  // const [team1FirstPlayer] = team1.players;
+  // const [team2FirstPlayer] = team2.players;
+  // const team1Player = toTeamPlayer(team1, team1.players[0])
+  // const team2Player = toTeamPlayer(team2, team2.players[0])
 
-  const startedRound = currentRound.startRound(
-    [ 
-      team1Player,
-      team2Player,
-    ]
-  );
+  const startedRound = currentRound.startRound();
 
   console.log('Started Round');
   console.log(startedRound);
 
-  const revealedSurvey = startedRound.survey.reveal();
+  // const revealedSurvey = startedRound.survey.reveal();
 
-  console.log('Survey Revealed');
-  console.log(revealedSurvey);
-  // const guessResponse = startedRound.buzzIn(team2Player);
+  // console.log('Survey Revealed');
+  // console.log(revealedSurvey);
+
+  const guessResponse = startedRound.buzzIn(
+    startedRound.buzzingPlayers[0],
+    'Some bad guess',
+  );
+
+  console.log('Guess Response');
+  if (guessResponse.response === BadGuess) {
+    console.log('Bad Guess');
+  }
+  console.log(guessResponse);
+
+  // Next step is pass or play
 
 })();

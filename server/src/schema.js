@@ -24,16 +24,24 @@ const typeDefs = gql`
     name: String
   }
 
+  enum RoundStatus {
+    Faceoff,
+    Playing,
+    Steal,
+    Completed
+  }
+
+  type Round {
+    status: RoundStatus
+  }
+
   type Game {
     token: String
     players: [Player!]!
     survey: Survey
     turn: Int
+    currentRound: Round
   }
-
-  # type GameResponse {
-  #   game: Game!
-  # }
 
   type Query {
     surveys: [Survey!]!
