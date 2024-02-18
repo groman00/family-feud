@@ -3,7 +3,8 @@ const {
   gameService, 
   playerService,
   pubSubService, 
-  surveyService
+  surveyService,
+  roundService
 } = require('./service');
 
 module.exports = {
@@ -22,6 +23,12 @@ module.exports = {
       playerService.getPlayersByGameId(game.id),   
     survey: async (game) => 
       surveyService.getByGameId(game.id),  
+    currentRound: async(game) => {
+      // For now, only one round per game
+      const [currentRound] = await roundService.getByGameId(game.id)
+      return currentRound;
+    }
+      
   },
 
   Mutation:  {

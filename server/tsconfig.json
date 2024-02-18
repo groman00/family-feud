@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "ts-ouput",
+    "target": "ESNext",
+    "module": "commonjs"
+  },
+  "files": [
+    "./src/domain/domain-test.ts",
+  ]
+}

@@ -30,6 +30,7 @@ export type Game = {
   players: Array<Player>;
   survey?: Maybe<Survey>;
   turn?: Maybe<Scalars['Int']>;
+  currentRound?: Maybe<Round>;
 };
 
 export type Mutation = {
@@ -80,6 +81,18 @@ export type Query = {
 export type QuerySurveyArgs = {
   id: Scalars['ID'];
 };
+
+export type Round = {
+  __typename?: 'Round';
+  status?: Maybe<RoundStatus>;
+};
+
+export enum RoundStatus {
+  Faceoff = 'Faceoff',
+  Playing = 'Playing',
+  Steal = 'Steal',
+  Completed = 'Completed'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -237,6 +250,9 @@ export type GameFieldsFragment = (
   )>, players: Array<(
     { __typename?: 'Player' }
     & Pick<Player, 'id' | 'name'>
+  )>, currentRound?: Maybe<(
+    { __typename?: 'Round' }
+    & Pick<Round, 'status'>
   )> }
 );
 
@@ -272,6 +288,9 @@ export const GameFieldsFragmentDoc = gql`
   players {
     id
     name
+  }
+  currentRound {
+    status
   }
 }
     `;

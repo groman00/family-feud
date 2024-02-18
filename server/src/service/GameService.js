@@ -1,4 +1,4 @@
-const { gameRepository } = require('../repository');
+const { gameRepository, roundRepository } = require('../repository');
 const answerService = require('./AnswerService');
 const playerService = require('./PlayerService');
 const surveyService = require('./SurveyService');
@@ -13,6 +13,11 @@ class GameService {
     const game = await gameRepository.createWithFields({
       token: Date.now().toString(),
     });
+
+    await roundRepository.createWithFields({
+      status: 'Faceoff', // todo make enum
+      gameId: game.id
+    })
     
     await playerService.createHost(game.id);
     

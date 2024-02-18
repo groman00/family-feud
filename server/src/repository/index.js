@@ -6,4 +6,5 @@ module.exports = {
   gameRepository: new BaseRepository(models.Game),
   playerRepository: new BaseRepository(models.Player),
   surveyRepository: new BaseRepository(models.Survey),
+  roundRepository: new BaseRepository(models.Round),
 };

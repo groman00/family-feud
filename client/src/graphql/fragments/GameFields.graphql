@@ -19,4 +19,7 @@ fragment GameFields on Game {
     id
     name
   }
+  currentRound {
+    status
+  }
 }
